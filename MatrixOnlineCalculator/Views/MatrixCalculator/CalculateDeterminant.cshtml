@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Вычисление определителя матрицы";
+}
+
+<p>Размер матрицы:</p>
+<select>
+    <option value="2">2x2</option>
+    <option value="3" selected>3x3</option>
+    <option value="4">4x4</option>
+    <option value="5">5x5</option>
+    <option value="6">6x6</option>
+</select>
+
+<form asp-action="CalculateDeterminantResult" method="post">
+    <div id="matrix"></div>
+    <input type="submit" value="Отправить" />
+</form>
+
+@section Scripts{
+    <script>
+        $(function () {
+            $("#matrix").html(renderMatrixInput(3, 3, "rows"));
+
+            $("select").change(function () {
+                $("#matrix").empty()
+                    .html(renderMatrixInput($(this).val(), $(this).val(), "rows"));           
+            });
+        });
+    </script>
+}

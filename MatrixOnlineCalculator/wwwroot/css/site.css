@@ -1,0 +1,24 @@
+﻿.matrix {
+    border-right: 2px solid black;
+    border-left: 2px solid black;
+    padding: 3px 8px;
+    border-radius: 8px / 50%;
+    display: inline-block;
+}
+
+.matrix input {
+    width: 50px;
+}
+
+.multilevelList {
+    counter-reset: itemNumber;
+    list-style-type: none;
+}
+
+.multilevelList li {
+    counter-increment: itemNumber;
+}
+
+.multilevelList li::marker {
+    content: counters(itemNumber, ".") ") ";
+}
