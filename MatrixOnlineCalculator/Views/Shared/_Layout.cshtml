@@ -19,16 +19,21 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Калькуляторы</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" asp-controller="MatrixCalculator" asp-action="CalculateDeterminant">
-                            Вычисление определителя
-                        </a>
+                        @foreach (var pair in MenuProvider.GetCalculators())
+                        {
+                            <a class="dropdown-item" asp-controller="@pair.Key.Controller" asp-action="@pair.Key.Action">
+                                @pair.Value
+                            </a>
+                        }
                     </div>
                 </li>
             </ul>
         </div>
     </nav>
-    <main class="container">
-        @RenderBody()
+    <main>
+        <div class="container pt-3">
+            @RenderBody()
+        </div>
     </main>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

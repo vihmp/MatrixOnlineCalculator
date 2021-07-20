@@ -1,5 +1,18 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Матричный калькулятор";
 }
 
-<a asp-controller="MatrixCalculator" asp-action="CalculateDeterminant">Вычисление определителя</a>
+<h1>Матричный калькулятор</h1>
+<div>
+    <h4>Калькуляторы:</h4>
+    <ul>
+        @foreach (var pair in MenuProvider.GetCalculators())
+        {
+            <li>
+                <a asp-controller="@pair.Key.Controller" asp-action="@pair.Key.Action">
+                    @pair.Value
+                </a>
+            </li>
+        }
+    </ul>
+</div>
