@@ -9,7 +9,16 @@
         let row = $("<tr></tr>");
 
         for (let j = 0; j < columnCount; j++) {
-            row.append(`<td><input name="${name}[${i}][${j}]" value="0" /></td>`);
+            let input = $(`<input class="form-control" name="${name}" value="0" />`);
+            input.focusout(function () {
+                if (!$(this).val().trim()) {
+                    $(this).val(0);
+                }
+            });
+
+            let td = $("<td></td>");
+            td.append(input);
+            row.append(td);
         }
 
         table.append(row);

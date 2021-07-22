@@ -7,7 +7,8 @@
 }
 
 .matrix input {
-    width: 50px;
+    width: 60px;
+    text-align: center;
 }
 
 .multilevelList {
@@ -21,4 +22,12 @@
 
 .multilevelList li::marker {
     content: counters(itemNumber, ".") ") ";
+}
+
+.error {
+    color: #b94a48;
+}
+
+input.error {
+    border: 1px solid #b94a48;
 }

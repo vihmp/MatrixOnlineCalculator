@@ -11,10 +11,10 @@ namespace MatrixOnlineCalculator.Controllers
             return View();
         }
 
-        public IActionResult CalculateDeterminantResult(double[][] rows)
+        public IActionResult CalculateDeterminantResult(int matrixSize, double[] matrixData)
         {
             var dct = new DeterminantCalculationTree(
-                Matrix<double>.Build.DenseOfRowArrays(rows));
+                Matrix<double>.Build.DenseOfRowMajor(matrixSize, matrixSize, matrixData));
             
             return View(dct);
         }
