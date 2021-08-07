@@ -1,4 +1,8 @@
-﻿.matrix {
+﻿p {
+    margin: 0.5em 0;
+}
+
+.matrix {
     border-right: 2px solid black;
     border-left: 2px solid black;
     padding: 3px 8px;
@@ -9,19 +13,6 @@
 .matrix input {
     width: 60px;
     text-align: center;
-}
-
-.multilevelList {
-    counter-reset: itemNumber;
-    list-style-type: none;
-}
-
-.multilevelList li {
-    counter-increment: itemNumber;
-}
-
-.multilevelList li::marker {
-    content: counters(itemNumber, ".") ") ";
 }
 
 .error {
