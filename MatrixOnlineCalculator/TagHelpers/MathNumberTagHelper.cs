@@ -14,8 +14,8 @@ namespace MatrixOnlineCalculator.TagHelpers
 
             if (Value < 0)
             {
-                output.PreElement.SetHtmlContent("<mo stretchy=\"false\">(</mo>");
-                output.PostElement.SetHtmlContent("<mo stretchy=\"false\">)</mo>");
+                output.PreElement.SetHtmlContent("<mrow><mo stretchy=\"false\">(</mo>");
+                output.PostElement.SetHtmlContent("<mo stretchy=\"false\">)</mo></mrow>");
             }
         }
     }

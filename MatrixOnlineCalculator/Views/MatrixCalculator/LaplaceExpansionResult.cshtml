@@ -1,0 +1,83 @@
+﻿@model LaplaceExpansion
+@{
+    ViewData["Title"] = "Вычисление определителя матрицы";
+}
+
+<h1>Вычисление определителя матрицы (теорема Лапласа)</h1>
+<div class="mb-2">
+    <math>
+        <mrow>
+            <mo>|</mo>
+            <math-matrix data="Model.Matrix" />
+            <mo>|</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>@Model.Determinant</mn>
+    </math>
+</div>
+<p>Подробное решение:</p>
+@{
+    var steps = new Stack<LaplaceExpansion>();
+    steps.Push(Model);
+
+    while (steps.Count > 0)
+    {
+        var step = steps.Pop();
+
+        <div>
+        @if (step.Matrix.ColumnCount > 2)
+        {
+            <math>
+                <mrow>
+                    <mo>|</mo>
+                    <math-matrix data="@step.Matrix" />
+                    <mo>|</mo>
+                </mrow>
+                <mo>=</mo>
+                @for (int j = 0; j < step.Matrix.ColumnCount; j++)
+                {
+                    if (j > 0)
+                    {
+                        <mo>@(j % 2 == 0 ? "+" : "-")</mo>
+                    }
+                    <math-number value="@step.Matrix[0, j]" />
+                    <mrow>
+                        <mo>*</mo>
+                        <mo>|</mo>
+                        <math-matrix data="step.Minors[j].Matrix" />
+                        <mo>|</mo>
+                    </mrow>
+                }
+            </math>
+
+            foreach (var substep in step.Minors)
+            {
+                steps.Push(substep);
+            }
+        }
+        else
+        {
+            <math>
+                <mrow>
+                    <mo>|</mo>
+                    <math-matrix data="@step.Matrix" />
+                    <mo>|</mo>
+                </mrow>
+                <mo>=</mo>
+                @for (int j = 0; j < step.Matrix.ColumnCount; j++)
+                {
+                    @if (j > 0)
+                    {
+                        <mo>@(j % 2 == 0 ? "+" : "-")</mo>
+                    }
+                    <math-number value="@step.Matrix[0, j]" />
+                    <mo>*</mo>
+                    <math-number value="@step.Minors[j].Determinant" />
+                }
+                <mo>=</mo>
+                <mn>@step.Determinant</mn>
+            </math>
+        }
+        </div>
+    }
+}

@@ -3,28 +3,28 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace MatrixOnlineCalculator.Models
 {
-    public class DeterminantCalculationTree
+    public class LaplaceExpansion
     {
         public Matrix<double> Matrix { get; private set; }
         public double Determinant { get; private set; }
-        public List<DeterminantCalculationTree> Subtrees { get; private set; }
+        public List<LaplaceExpansion> Minors { get; private set; }
 
-        public DeterminantCalculationTree(Matrix<double> matrix)
+        public LaplaceExpansion(Matrix<double> matrix)
         {
             Matrix = matrix;
             Determinant = 0;
-            Subtrees = new List<DeterminantCalculationTree>();
+            Minors = new List<LaplaceExpansion>();
 
             if(matrix.ColumnCount > 1)
             {
                 for (int j = 0; j < matrix.ColumnCount; j++)
                 {
                     var submatrix = matrix.RemoveRow(0).RemoveColumn(j);
-                    var substep = new DeterminantCalculationTree(submatrix);
-                    Subtrees.Add(substep);
+                    var minor = new LaplaceExpansion(submatrix);
+                    Minors.Add(minor);
 
-                    double multiplier = j % 2 == 0 ? matrix[0, j] : -matrix[0, j];
-                    Determinant += multiplier * substep.Determinant;
+                    int sign = (j % 2 == 0) ? 1 : -1;
+                    Determinant += sign * matrix[0, j] * minor.Determinant;
                 }
             }
             else

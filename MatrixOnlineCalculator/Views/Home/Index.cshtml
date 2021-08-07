@@ -4,15 +4,12 @@
 
 <h1>Матричный калькулятор</h1>
 <div>
-    <h4>Калькуляторы:</h4>
+    <p>Калькуляторы:</p>
     <ul>
-        @foreach (var pair in MenuProvider.GetCalculators())
-        {
-            <li>
-                <a asp-controller="@pair.Key.Controller" asp-action="@pair.Key.Action">
-                    @pair.Value
-                </a>
-            </li>
-        }
+        <li>
+            <a asp-controller="MatrixCalculator" asp-action="LaplaceExpansion">
+                Вычисление определителя матрицы (теорема Лапласа)
+            </a>
+        </li>
     </ul>
 </div>

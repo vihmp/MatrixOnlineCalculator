@@ -6,6 +6,7 @@
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/lib/mathjax/es5/mml-chtml.min.js" id="MathJax-script"></script>
 </head>
 <body>
     <nav class="navbar navbar-expand navbar-dark bg-primary">
@@ -19,12 +20,9 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Калькуляторы</a>
                     <div class="dropdown-menu">
-                        @foreach (var pair in MenuProvider.GetCalculators())
-                        {
-                            <a class="dropdown-item" asp-controller="@pair.Key.Controller" asp-action="@pair.Key.Action">
-                                @pair.Value
-                            </a>
-                        }
+                        <a class="dropdown-item" asp-controller="MatrixCalculator" asp-action="LaplaceExpansion">
+                            Вычисление определителя матрицы (теорема Лапласа)
+                        </a>
                     </div>
                 </li>
             </ul>

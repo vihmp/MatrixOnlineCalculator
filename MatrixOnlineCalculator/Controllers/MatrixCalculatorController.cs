@@ -6,14 +6,14 @@ namespace MatrixOnlineCalculator.Controllers
 {
     public class MatrixCalculatorController : Controller
     {
-        public IActionResult CalculateDeterminant()
+        public IActionResult LaplaceExpansion()
         {
             return View();
         }
 
-        public IActionResult CalculateDeterminantResult(int matrixSize, double[] matrixData)
+        public IActionResult LaplaceExpansionResult(int matrixSize, double[] matrixData)
         {
-            var dct = new DeterminantCalculationTree(
+            var dct = new LaplaceExpansion(
                 Matrix<double>.Build.DenseOfRowMajor(matrixSize, matrixSize, matrixData));
             
             return View(dct);
