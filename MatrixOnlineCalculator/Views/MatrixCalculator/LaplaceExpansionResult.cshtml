@@ -29,59 +29,62 @@
             index++;
 
             <li>
-            @if (step.Expansion.Matrix.ColumnCount > 2)
-            {
+                @if (step.Expansion.Matrix.ColumnCount > 2)
+                {
+                    <p>
+                        @if (step.ParentIndex > 0)
+                        {
+                            @: Вычислим значение минора
+                            <math>
+                                <msubsup>
+                                    <mi>M</mi>
+                                    <mrow>
+                                        <mn>@step.Row</mn>
+                                        <mo>,</mo>
+                                        <mspace></mspace>
+                                        <mn>@step.Column</mn>
+                                    </mrow>
+                                    <mn>@step.ParentIndex</mn>
+                                </msubsup>
+                            </math>@: .
+                        }
+                        Найдем разложение определителя по первой строке матрицы:
+                    </p>
+                }
+
                 <p>
-                    @if(step.ParentIndex > 0)
-                    {
-                        @: Вычислим значение минора
-                        <math>
+                    <math>
+                        @if (step.ParentIndex > 0)
+                        {
                             <msubsup>
                                 <mi>M</mi>
                                 <mrow>
                                     <mn>@step.Row</mn>
                                     <mo>,</mo>
+                                    <mspace></mspace>
                                     <mn>@step.Column</mn>
                                 </mrow>
                                 <mn>@step.ParentIndex</mn>
                             </msubsup>
-                        </math>@: .
-                    }
-                    Найдем разложение определителя по первой строке матрицы:
-                </p>
-            }
-            <p>
-                <math>
-                    @if (step.ParentIndex > 0)
-                    {
-                        <msubsup>
-                            <mi>M</mi>
-                            <mrow>
-                                <mn>@step.Row</mn>
-                                <mo>,</mo>
-                                <mn>@step.Column</mn>
-                            </mrow>
-                            <mn>@step.ParentIndex</mn>
-                        </msubsup>
+                            <mo>=</mo>
+                        }
+
+                        <mrow>
+                            <mo>|</mo>
+                            <math-matrix data="@step.Expansion.Matrix" />
+                            <mo>|</mo>
+                        </mrow>
                         <mo>=</mo>
-                    }
-                    <mrow>
-                        <mo>|</mo>
-                        <math-matrix data="@step.Expansion.Matrix" />
-                        <mo>|</mo>
-                    </mrow>
-                    <mo>=</mo>
 
-                    @if (step.Expansion.Matrix.ColumnCount > 2)
-                    {
-                        for (int j = 0; j < step.Expansion.Matrix.ColumnCount; j++)
+                        @if (step.Expansion.Matrix.ColumnCount > 2)
                         {
-                            if (j > 0)
+                            for (int j = 0; j < step.Expansion.Matrix.ColumnCount; j++)
                             {
-                                <mo>+</mo>
-                            }
+                                if (j > 0)
+                                {
+                                    <mo>+</mo>
+                                }
 
-                            <mrow>
                                 <msup>
                                     <mrow>
                                         <mo>(</mo>
@@ -106,18 +109,43 @@
                                     </mrow>
                                     <mn>@index</mn>
                                 </msubsup>
-                            </mrow>
-                        }
-                        <mo>=</mo>
-
-                        for (int j = 0; j < step.Expansion.Matrix.ColumnCount; j++)
-                        {
-                            @if (j > 0)
-                            {
-                                <mo>@(j % 2 == 0 ? "+" : "-")</mo>
                             }
 
-                            <mrow>
+                            <mo>=</mo>
+                        }
+                        else
+                        {
+                            @for (int j = 0; j < step.Expansion.Matrix.ColumnCount; j++)
+                            {
+                                @if (j > 0)
+                                {
+                                    <mo>@(j % 2 == 0 ? "+" : "-")</mo>
+                                }
+
+                                <math-number value="@step.Expansion.Matrix[0, j]" />
+                                <mo>&sdot;</mo>
+                                <math-number value="@step.Expansion.Minors[j].Minor.Determinant" />
+                            }
+                            <mo>=</mo>
+                            <mn>@step.Expansion.Determinant</mn>
+                        }
+
+                    </math>
+                </p>
+
+                @if (step.Expansion.Matrix.ColumnCount > 2)
+                {
+                    <p>
+                        <math>
+                            <mo>=</mo>
+
+                            @for (int j = 0; j < step.Expansion.Matrix.ColumnCount; j++)
+                            {
+                                @if (j > 0)
+                                {
+                                    <mo>@(j % 2 == 0 ? "+" : "-")</mo>
+                                }
+
                                 <math-number value="@step.Expansion.Matrix[0, j]" />
                                 <mo>&sdot;</mo>
                                 <mrow>
@@ -125,36 +153,35 @@
                                     <math-matrix data="step.Expansion.Minors[j].Minor.Matrix" />
                                     <mo>|</mo>
                                 </mrow>
-                            </mrow>
-                        }
-                        <mo>=</mo>
-                    }
+                            }
+                            <mo>=</mo>
+                        </math>
+                    </p>
+                    <p>
+                        <math>
+                            <mo>=</mo>
 
-                    @for (int j = 0; j < step.Expansion.Matrix.ColumnCount; j++)
+                            @for (int j = 0; j < step.Expansion.Matrix.ColumnCount; j++)
+                            {
+                                @if (j > 0)
+                                {
+                                    <mo>@(j % 2 == 0 ? "+" : "-")</mo>
+                                }
+
+                                <math-number value="@step.Expansion.Matrix[0, j]" />
+                                <mo>&sdot;</mo>
+                                <math-number value="@step.Expansion.Minors[j].Minor.Determinant" />
+                            }
+                            <mo>=</mo>
+                            <mn>@step.Expansion.Determinant</mn>
+                        </math>
+                    </p>
+
+                    foreach (var substep in step.Expansion.Minors.AsEnumerable().Reverse())
                     {
-                        @if (j > 0)
-                        {
-                            <mo>@(j % 2 == 0 ? "+" : "-")</mo>
-                        }
-
-                        <mrow>
-                            <math-number value="@step.Expansion.Matrix[0, j]" />
-                            <mo>&sdot;</mo>
-                            <math-number value="@step.Expansion.Minors[j].Minor.Determinant" />
-                        </mrow>
+                        steps.Push((index, substep.Row, substep.Column, substep.Minor));
                     }
-                    <mo>=</mo>
-                    <mn>@step.Expansion.Determinant</mn>
-                </math>
-            </p>
-
-            @if (step.Expansion.Matrix.ColumnCount > 2)
-            { 
-                foreach (var substep in step.Expansion.Minors.AsEnumerable().Reverse())
-                {
-                    steps.Push((index, substep.Row, substep.Column, substep.Minor));
                 }
-            }
             </li>
         }
     }
