@@ -6,6 +6,11 @@ namespace MatrixOnlineCalculator.Controllers
 {
     public class MatrixCalculatorController : Controller
     {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         public IActionResult LaplaceExpansion()
         {
             return View();
