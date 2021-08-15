@@ -17,7 +17,10 @@
     <input type="submit" class="btn btn-primary" value="Вычислить" />
 </form>
 
-@section Scripts{
+@section Scripts
+{
+    <partial name="_GlobalizationScripts" />
+    <partial name="_ValidationScripts" />
     <script>
         $(function () {
             $("#matrix").html(renderMatrixInput(3, 3, "matrixData"));
@@ -28,14 +31,25 @@
             });
 
             $("form").validate({
-                errorPlacement: function () {},
-                rules: {
-                    matrixData: {
-                        required: true,
-                        number: true
-                    }
-                }
+                errorPlacement: function () { }
             });
+
+            $("[name^=matrixData]").each(function () {
+                $(this).rules("add", {
+                    required: true,
+                    number: true
+                });
+            });
+
+            //$("form").validate({
+            //    errorPlacement: function () { },
+            //    rules: {
+            //        "matrixData[]": {
+            //            required: true,
+            //            number: true
+            //        }
+            //    }
+            //});
         });
     </script>
 }
