@@ -1,16 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using MathNet.Numerics.LinearAlgebra;
 using MatrixOnlineCalculator.Models;
-using MathNet.Numerics.LinearAlgebra;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MatrixOnlineCalculator.Controllers
 {
-    public class MatrixCalculatorController : Controller
+    public class DeterminantCalculationController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         public IActionResult LaplaceExpansion()
         {
             return View();
@@ -20,7 +15,7 @@ namespace MatrixOnlineCalculator.Controllers
         {
             var dct = new LaplaceExpansion(
                 Matrix<double>.Build.DenseOfRowMajor(matrixSize, matrixSize, matrixData));
-            
+
             return View(dct);
         }
     }

@@ -1,12 +1,7 @@
 ﻿using MatrixOnlineCalculator.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using MathNet.Numerics.LinearAlgebra;
 
 namespace MatrixOnlineCalculator.Controllers
 {
@@ -20,6 +15,11 @@ namespace MatrixOnlineCalculator.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Calculators()
         {
             return View();
         }
