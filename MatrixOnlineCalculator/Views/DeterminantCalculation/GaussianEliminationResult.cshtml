@@ -1,0 +1,125 @@
+﻿@model DeterminantByGaussianElimination
+@{
+    ViewData["Title"] = "Вычисление определителя матрицы";
+    const int precision = 4;
+}
+
+<h1>Вычисление определителя матрицы (метод Гаусса)</h1>
+<p>
+    <math>
+        <mrow>
+            <mo>|</mo>
+            <math-matrix data="Model.GaussianElimination.Initial" />
+            <mo>|</mo>
+        </mrow>
+        <mo>=</mo>
+        <mn>@Math.Round(Model.Determinant, precision)</mn>
+    </math>
+</p>
+
+<p>Подробное решение:</p>
+<ol>
+    @foreach (var operation in Model.GaussianElimination.ElementaryRowOperations)
+    {
+        <li>
+            <p>
+                @switch (operation)
+                {
+                    case RowSwitching rs:
+                        <math>
+                            <mrow>
+                                <msub>
+                                    <mi>R</mi>
+                                    <mn>@(rs.FirstRow + 1)</mn>
+                                </msub>
+                                <mo>&harr;</mo>
+                                <msub>
+                                    <mi>R</mi>
+                                    <mn>@(rs.SecondRow + 1)</mn>
+                                </msub>
+                            </mrow>
+                        </math>
+                        break;
+                    case RowAdditionsSet ras:
+                        @for (int i = 0; i < ras.Additions.Count; i++)
+                        {
+                            if (i > 0)
+                            {
+                                @: ,
+                            }
+
+                            <math>
+                                <msub>
+                                    <mi>R</mi>
+                                    <mn>@(ras.Additions[i].FirstSummandRow + 1)</mn>
+                                </msub>
+                                @if (ras.Additions[i].Multiplier > 0)
+                                {
+                                    <mo>+</mo>
+                                    <mn>@Math.Round(ras.Additions[i].Multiplier, precision)</mn>
+                                }
+                                else
+                                {
+                                    <mo>-</mo>
+                                    <mn>@Math.Round(Math.Abs(ras.Additions[i].Multiplier), precision)</mn>
+                                }
+                                <msub>
+                                    <mi>R</mi>
+                                    <mn>@(ras.Additions[i].SecondSummandRow + 1)</mn>
+                                </msub>
+                                <mo>&rarr;</mo>
+                                <msub>
+                                    <mi>R</mi>
+                                    <mn>@(ras.Additions[i].FirstSummandRow + 1)</mn>
+                                </msub>
+                            </math>
+                        }
+                        break;
+                }
+            </p>
+            <p>
+                <math>
+                    <mrow>
+                        <mo>(</mo>
+                        <math-matrix data="operation.Initial" precision="@precision" />
+                        <mo>)</mo>
+                    </mrow>
+                    <mo>&rarr;</mo>
+                    <mrow>
+                        <mo>(</mo>
+                        <math-matrix data="operation.Result" precision="@precision" />
+                        <mo>)</mo>
+                    </mrow>
+                </math>
+            </p>
+        </li>
+    }
+    <li>
+        <p>Вычислим значение определителя:</p>
+        <p>
+            <math>
+                <mrow>
+                    <mo>|</mo>
+                    <math-matrix data="Model.GaussianElimination.Initial" />
+                    <mo>|</mo>
+                </mrow>
+                <mo>=</mo>
+                @for (int i = 0; i < Model.GaussianElimination.Initial.RowCount; i++)
+                {
+                    if (i > 0)
+                    {
+                        <mo>&sdot;</mo>
+                    }
+                    <math-number value="@Math.Round(Model.GaussianElimination.Result[i, i], precision)" />
+                }
+                <mo>=</mo>
+                <mn>@Math.Round(Model.Determinant, precision)</mn>
+            </math>
+        </p>
+    </li>
+</ol>
+
+@section Scripts
+{
+    <partial name="_GlobalizationScripts" />
+}

@@ -13,10 +13,23 @@ namespace MatrixOnlineCalculator.Controllers
 
         public IActionResult LaplaceExpansionResult(int matrixSize, double[] matrixData)
         {
-            var dct = new LaplaceExpansion(
+            var laplaceExpansion = new LaplaceExpansion(
                 Matrix<double>.Build.DenseOfRowMajor(matrixSize, matrixSize, matrixData));
 
-            return View(dct);
+            return View(laplaceExpansion);
+        }
+
+        public IActionResult GaussianElimination()
+        {
+            return View();
+        }
+
+        public IActionResult GaussianEliminationResult(int matrixSize, double[] matrixData)
+        {
+            var gaussianElimination = new DeterminantByGaussianElimination(
+                Matrix<double>.Build.DenseOfRowMajor(matrixSize, matrixSize, matrixData));
+
+            return View(gaussianElimination);
         }
     }
 }

@@ -2,12 +2,12 @@
     ViewData["Title"] = "Вычисление определителя матрицы";
 }
 
-<h1>Вычисление определителя матрицы (теорема Лапласа)</h1>
-<form asp-action="LaplaceExpansionResult" method="post">
+<h1>Вычисление определителя матрицы (метод Гаусса)</h1>
+<form asp-action="GaussianEliminationResult" method="post">
     <div class="form-group">
         <label for="matrixSize">Размер матрицы:</label>
         <select id="matrixSize" name="matrixSize" class="custom-select">
-            @for (int i = 2; i < 6; i++)
+            @for (int i = 2; i < 11; i++)
             {
                 <option value="@i">@(i)x@(i)</option>
             }
@@ -28,7 +28,7 @@
 
             $("#matrixSize").change(function () {
                 $("#matrix").empty()
-                    .html(renderMatrixInput($(this).val(), $(this).val(), "matrixData"));           
+                    .html(renderMatrixInput($(this).val(), $(this).val(), "matrixData"));
             });
 
             $("form").validate({
