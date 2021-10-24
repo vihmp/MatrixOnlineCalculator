@@ -13,7 +13,7 @@
             <mo>|</mo>
         </mrow>
         <mo>=</mo>
-        <mn>@Math.Round(Model.Determinant, precision)</mn>
+        <math-number value="Model.Determinant" precision="precision" />
     </math>
 </p>
 
@@ -21,78 +21,100 @@
 <ol>
     @foreach (var operation in Model.GaussianElimination.ElementaryRowOperations)
     {
-        <li>
-            <p>
-                @switch (operation)
-                {
-                    case RowSwitching rs:
-                        <math>
-                            <mrow>
-                                <msub>
-                                    <mi>R</mi>
-                                    <mn>@(rs.FirstRow + 1)</mn>
-                                </msub>
-                                <mo>&harr;</mo>
-                                <msub>
-                                    <mi>R</mi>
-                                    <mn>@(rs.SecondRow + 1)</mn>
-                                </msub>
-                            </mrow>
-                        </math>
-                        break;
-                    case RowAdditionsSet ras:
-                        @for (int i = 0; i < ras.Additions.Count; i++)
-                        {
-                            if (i > 0)
-                            {
-                                @: ,
-                            }
-
+        if (!operation.Initial.Equals(operation.Result))
+        {
+            <li>
+                <p>
+                    @switch (operation)
+                    {
+                        case RowSwitching rs:
                             <math>
-                                <msub>
-                                    <mi>R</mi>
-                                    <mn>@(ras.Additions[i].FirstSummandRow + 1)</mn>
-                                </msub>
-                                @if (ras.Additions[i].Multiplier > 0)
-                                {
-                                    <mo>+</mo>
-                                    <mn>@Math.Round(ras.Additions[i].Multiplier, precision)</mn>
-                                }
-                                else
-                                {
-                                    <mo>-</mo>
-                                    <mn>@Math.Round(Math.Abs(ras.Additions[i].Multiplier), precision)</mn>
-                                }
-                                <msub>
-                                    <mi>R</mi>
-                                    <mn>@(ras.Additions[i].SecondSummandRow + 1)</mn>
-                                </msub>
-                                <mo>&rarr;</mo>
-                                <msub>
-                                    <mi>R</mi>
-                                    <mn>@(ras.Additions[i].FirstSummandRow + 1)</mn>
-                                </msub>
+                                <mrow>
+                                    <msub>
+                                        <mi>R</mi>
+                                        <mn>@(rs.FirstRow + 1)</mn>
+                                    </msub>
+                                    <mo>&harr;</mo>
+                                    <msub>
+                                        <mi>R</mi>
+                                        <mn>@(rs.SecondRow + 1)</mn>
+                                    </msub>
+                                </mrow>
                             </math>
-                        }
-                        break;
-                }
-            </p>
-            <p>
-                <math>
-                    <mrow>
-                        <mo>(</mo>
-                        <math-matrix data="operation.Initial" precision="@precision" />
-                        <mo>)</mo>
-                    </mrow>
-                    <mo>&rarr;</mo>
-                    <mrow>
-                        <mo>(</mo>
-                        <math-matrix data="operation.Result" precision="@precision" />
-                        <mo>)</mo>
-                    </mrow>
-                </math>
-            </p>
-        </li>
+                            break;
+                        case RowAdditionsSet ras:
+                            {
+                                bool isFirstAddition = true;
+
+                                foreach (var addition in ras.Additions)
+                                {
+                                    if (!MathUtils.AreEqual(0, addition.Multiplier, MathUtils.Epsilon))
+                                    {
+                                        if (!isFirstAddition)
+                                        {
+                                            @: ,
+                                        }
+                                        else
+                                        {
+                                            isFirstAddition = false;
+                                        }
+
+                                        <math>
+                                            <msub>
+                                                <mi>R</mi>
+                                                <mn>@(addition.FirstSummandRow + 1)</mn>
+                                            </msub>
+                                            @if (addition.Multiplier > 0)
+                                            {
+                                                <mo>+</mo>
+                                                if (!MathUtils.AreEqual(addition.Multiplier, 1, MathUtils.Epsilon))
+                                                {
+                                                    <math-number value="addition.Multiplier" 
+                                                                 precision="precision"/>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <mo>-</mo>
+                                                if (!MathUtils.AreEqual(addition.Multiplier, -1, MathUtils.Epsilon))
+                                                {
+                                                    <math-number value="Math.Abs(addition.Multiplier)" 
+                                                                 precision="precision"/>
+                                                }
+                                            }
+                                            <msub>
+                                                <mi>R</mi>
+                                                <mn>@(addition.SecondSummandRow + 1)</mn>
+                                            </msub>
+                                            <mo>&rarr;</mo>
+                                            <msub>
+                                                <mi>R</mi>
+                                                <mn>@(addition.FirstSummandRow + 1)</mn>
+                                            </msub>
+                                        </math>
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                </p>
+                <p>
+                    <math>
+                        <mrow>
+                            <mo>(</mo>
+                            <math-matrix data="operation.Initial" precision="precision" />
+                            <mo>)</mo>
+                        </mrow>
+                        <mo>&rarr;</mo>
+                        <mrow>
+                            <mo>(</mo>
+                            <math-matrix data="operation.Result" precision="precision" />
+                            <mo>)</mo>
+                        </mrow>
+                    </math>
+                </p>
+            </li>
+        }
     }
     <li>
         <p>Вычислим значение определителя:</p>
@@ -110,10 +132,12 @@
                     {
                         <mo>&sdot;</mo>
                     }
-                    <math-number value="@Math.Round(Model.GaussianElimination.Result[i, i], precision)" />
+                    <math-number value="Model.GaussianElimination.Result[i, i]" 
+                                 precision="precision" 
+                                 use-brackets="true" />
                 }
                 <mo>=</mo>
-                <mn>@Math.Round(Model.Determinant, precision)</mn>
+                <math-number value="Model.Determinant" precision="precision"/>
             </math>
         </p>
     </li>

@@ -1,4 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using MatrixOnlineCalculator.Models;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Text;
@@ -22,14 +23,20 @@ namespace MatrixOnlineCalculator.TagHelpers
 
                 for(int j = 0; j < Data.ColumnCount; j++)
                 {
-                    if(Precision != null)
+                    double value = Data[i, j];
+
+                    if (Precision != null)
                     {
-                        row.Append($"<mtd><mn>{Math.Round(Data[i, j], (int)Precision)}</mn></mtd>");
+                        value = Math.Round(Data[i, j], (int)Precision);
                     }
-                    else
+
+                    // Avoid negative zero
+                    if (MathUtils.AreEqual(value, 0, MathUtils.Epsilon))
                     {
-                        row.Append($"<mtd><mn>{Data[i, j]}</mn></mtd>");
+                        value = 0;
                     }
+
+                    row.Append($"<mtd><mn>{value}</mn></mtd>");
                 }
 
                 output.Content.AppendHtml($"<mtr>{row}</mtr>");
