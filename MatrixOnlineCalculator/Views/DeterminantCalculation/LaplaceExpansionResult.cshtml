@@ -1,6 +1,7 @@
 ﻿@model LaplaceExpansion
 @{
     ViewData["Title"] = "Вычисление определителя матрицы";
+    const int precision = 4;
 }
 
 <h1>Вычисление определителя матрицы (теорема Лапласа)</h1>
@@ -12,7 +13,7 @@
             <mo>|</mo>
         </mrow>
         <mo>=</mo>
-        <mn>@Model.Determinant</mn>
+        <math-number value="Model.Determinant" precision="precision"/>
     </math>
 </p>
 
@@ -71,7 +72,7 @@
 
                         <mrow>
                             <mo>|</mo>
-                            <math-matrix data="@step.Expansion.Matrix" />
+                            <math-matrix data="step.Expansion.Matrix" />
                             <mo>|</mo>
                         </mrow>
                         <mo>=</mo>
@@ -98,7 +99,7 @@
                                     </mrow>
                                 </msup>
                                 <mo>&sdot;</mo>
-                                <math-number value="@step.Expansion.Matrix[0, j]" />
+                                <math-number value="step.Expansion.Matrix[0, j]" use-brackets="true"/>
                                 <mo>&sdot;</mo>
                                 <msubsup>
                                     <mi>M</mi>
@@ -123,14 +124,15 @@
                                     <mo>@(j % 2 == 0 ? "+" : "-")</mo>
                                 }
 
-                                <math-number value="@step.Expansion.Matrix[0, j]" />
+                                <math-number value="step.Expansion.Matrix[0, j]" use-brackets="true"/>
                                 <mo>&sdot;</mo>
-                                <math-number value="@step.Expansion.Minors[j].Minor.Determinant" />
+                                <math-number value="step.Expansion.Minors[j].Minor.Determinant"
+                                             use-brackets="true"
+                                             precision="precision"/>
                             }
                             <mo>=</mo>
-                            <mn>@step.Expansion.Determinant</mn>
+                            <math-number value="step.Expansion.Determinant" precision="precision"/>
                         }
-
                     </math>
                 </p>
 
@@ -147,7 +149,7 @@
                                     <mo>@(j % 2 == 0 ? "+" : "-")</mo>
                                 }
 
-                                <math-number value="@step.Expansion.Matrix[0, j]" />
+                                <math-number value="step.Expansion.Matrix[0, j]" use-brackets="true" />
                                 <mo>&sdot;</mo>
                                 <mrow>
                                     <mo>|</mo>
@@ -169,12 +171,15 @@
                                     <mo>@(j % 2 == 0 ? "+" : "-")</mo>
                                 }
 
-                                <math-number value="@step.Expansion.Matrix[0, j]" />
+                                <math-number value="step.Expansion.Matrix[0, j]" use-brackets="true" />
                                 <mo>&sdot;</mo>
-                                <math-number value="@step.Expansion.Minors[j].Minor.Determinant" />
+                                <math-number value="step.Expansion.Minors[j].Minor.Determinant"
+                                             use-brackets="true"
+                                             precision="precision"/>
                             }
                             <mo>=</mo>
-                            <mn>@step.Expansion.Determinant</mn>
+                            <math-number value="step.Expansion.Determinant" 
+                                         precision="precision"/>
                         </math>
                     </p>
 
