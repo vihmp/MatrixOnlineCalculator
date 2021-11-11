@@ -1,9 +1,9 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
-using MatrixOnlineCalculator.Models.ElementaryRowOperations;
+using MatrixOnlineCalculator.Models.GaussianEliminationCalculation.ElementaryRowOperations;
 using System;
 using System.Collections.Generic;
 
-namespace MatrixOnlineCalculator.Models
+namespace MatrixOnlineCalculator.Models.GaussianEliminationCalculation
 {
     public class GaussianElimination
     {

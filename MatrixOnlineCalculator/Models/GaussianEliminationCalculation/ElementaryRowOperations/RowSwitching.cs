@@ -1,6 +1,6 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 
-namespace MatrixOnlineCalculator.Models.ElementaryRowOperations
+namespace MatrixOnlineCalculator.Models.GaussianEliminationCalculation.ElementaryRowOperations
 {
     public class RowSwitching : ElementaryRowOperation
     {

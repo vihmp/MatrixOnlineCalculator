@@ -1,7 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using System.Collections.Generic;
 
-namespace MatrixOnlineCalculator.Models.ElementaryRowOperations
+namespace MatrixOnlineCalculator.Models.GaussianEliminationCalculation.ElementaryRowOperations
 {
     public class RowAdditionsSet : ElementaryRowOperation
     {

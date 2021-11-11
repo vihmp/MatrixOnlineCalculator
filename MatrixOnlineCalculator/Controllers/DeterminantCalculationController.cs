@@ -1,5 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
-using MatrixOnlineCalculator.Models;
+using MatrixOnlineCalculator.Models.DeterminantCalculation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MatrixOnlineCalculator.Controllers

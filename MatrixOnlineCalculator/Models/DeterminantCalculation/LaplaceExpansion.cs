@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using MathNet.Numerics.LinearAlgebra;
 
-namespace MatrixOnlineCalculator.Models
+namespace MatrixOnlineCalculator.Models.DeterminantCalculation
 {
     public class LaplaceExpansion
     {

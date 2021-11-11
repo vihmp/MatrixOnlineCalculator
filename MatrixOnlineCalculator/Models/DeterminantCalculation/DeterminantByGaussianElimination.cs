@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
+using MatrixOnlineCalculator.Models.GaussianEliminationCalculation;
 
-namespace MatrixOnlineCalculator.Models
+namespace MatrixOnlineCalculator.Models.DeterminantCalculation
 {
     public class DeterminantByGaussianElimination
     {
