@@ -1,5 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
-using MatrixOnlineCalculator.Models;
+using MatrixOnlineCalculator.Models.GaussianEliminationCalculation;
 using NUnit.Framework;
 
 namespace UnitTests.Models
