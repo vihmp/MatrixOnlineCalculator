@@ -22,6 +22,7 @@ namespace MatrixOnlineCalculator.Models.GaussianEliminationCalculation
 
             while ((i < currentMatrix.RowCount) && (j < currentMatrix.ColumnCount))
             {
+                // Check if we need to switch rows
                 double maxAbs = Math.Abs(currentMatrix[i, j]);
                 int secondRow = i;
 
@@ -56,6 +57,7 @@ namespace MatrixOnlineCalculator.Models.GaussianEliminationCalculation
                     currentMatrix = rowSwitching.Result;
                 }
 
+                // Add row Ri to all rows below Ri
                 var rowAdditionsSet = new RowAdditionsSet(
                     currentMatrix, 
                     Matrix<double>.Build.DenseOfMatrix(currentMatrix));
