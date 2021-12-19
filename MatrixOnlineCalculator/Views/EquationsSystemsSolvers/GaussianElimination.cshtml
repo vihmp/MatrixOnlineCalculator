@@ -1,5 +1,68 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Решение системы уравнений";
+}
+
+<h1>Решение системы уравнений (метод Гаусса)</h1>
+<form asp-controller="EquationsSystemsSolvers" asp-action="GaussianEliminationResult" method="post">
+    <div class="form-group">
+        <label for="variablesNumber">Количество переменных:</label>
+        <select id="variablesNumber" name="variablesNumber" class="custom-select">
+            @for (int i = 2; i < 8; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="equationsNumber">Количество уравнений:</label>
+        <select id="equationsNumber" name="equationsNumber" class="custom-select">
+            @for (int i = 2; i < 8; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+    <div id="equationSystem" class="form-group"></div>
+    <input type="submit" class="btn btn-primary" value="Вычислить" />
+</form>
+
+@section Scripts
+{
+    <partial name="_GlobalizationScripts" />
+    <partial name="_ValidationScripts" />
+    <script>
+        $(function () {
+            $("#variablesNumber").val(3);
+            $("#equationsNumber").val(3);
+            $("#equationSystem").html(renderEquationsSystemInput(3, 3, "a", "b"));
+
+            $("#variablesNumber").change(function () {
+                $("#equationSystem").empty()
+                    .html(renderEquationsSystemInput($("#equationsNumber").val(), $(this).val(), "a", "b"));
+            });
+
+            $("#equationsNumber").change(function () {
+                $("#equationSystem").empty()
+                    .html(renderEquationsSystemInput($(this).val(), $("#variablesNumber").val(), "a", "b"));
+            });
+
+            $("form").validate({
+                errorPlacement: function () { }
+            });
+
+            $("[name^=a]").each(function () {
+                $(this).rules("add", {
+                    required: true,
+                    number: true
+                });
+            });
+
+            $("[name^=b]").each(function () {
+                $(this).rules("add", {
+                    required: true,
+                    number: true
+                });
+            });
+        });
+    </script>
 }

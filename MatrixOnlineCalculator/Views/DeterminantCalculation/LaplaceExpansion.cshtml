@@ -3,7 +3,7 @@
 }
 
 <h1>Вычисление определителя матрицы (теорема Лапласа)</h1>
-<form asp-action="LaplaceExpansionResult" method="post">
+<form asp-controller="DeterminantCalculation" asp-action="LaplaceExpansionResult" method="post">
     <div class="form-group">
         <label for="matrixSize">Размер матрицы:</label>
         <select id="matrixSize" name="matrixSize" class="custom-select">

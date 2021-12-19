@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using MathNet.Numerics.LinearAlgebra;
+using MatrixOnlineCalculator.Models.EquationsSystemsSolvers;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MatrixOnlineCalculator.Controllers
 {
@@ -14,12 +12,19 @@ namespace MatrixOnlineCalculator.Controllers
         }
 
         public IActionResult GaussianEliminationResult(
-            int rowsNumber, 
-            int columnsNumber, 
+            int equationsNumber, 
+            int variablesNumber, 
             double[] a, 
             double[] b)
         {
-            return View();
+            var aMatrix = 
+                Matrix<double>.Build.DenseOfRowMajor(equationsNumber, variablesNumber, a);
+            var bMatrix =
+                Matrix<double>.Build.DenseOfRowMajor(equationsNumber, 1, b);
+            var equationSystemSolver = 
+                new EquationsSystemSolverByGaussianElimination(aMatrix, bMatrix);
+
+            return View(equationSystemSolver);
         }
     }
 }

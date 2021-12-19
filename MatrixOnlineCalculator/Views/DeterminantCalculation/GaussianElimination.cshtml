@@ -3,7 +3,7 @@
 }
 
 <h1>Вычисление определителя матрицы (метод Гаусса)</h1>
-<form asp-action="GaussianEliminationResult" method="post">
+<form asp-controller="DeterminantCalculation" asp-action="GaussianEliminationResult" method="post">
     <div class="form-group">
         <label for="matrixSize">Размер матрицы:</label>
         <select id="matrixSize" name="matrixSize" class="custom-select">
