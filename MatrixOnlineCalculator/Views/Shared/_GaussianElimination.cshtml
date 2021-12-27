@@ -1,0 +1,104 @@
+﻿@model GaussianElimination
+@inject IOptions<MathFormatOptions> mathFormatOptions
+@{
+    int precision = mathFormatOptions.Value.DecimalPrecision;
+    double epsilon = Math.Pow(0.1, precision);
+}
+
+@foreach (var operation in Model.ElementaryRowOperations)
+{
+    if (!operation.Initial.Equals(operation.Result))
+    {
+        <li>
+            <p>
+                @switch (operation)
+                {
+                    case RowSwitching rs:
+                        <math>
+                            <mrow>
+                                <msub>
+                                    <mi>R</mi>
+                                    <mn>@(rs.FirstRow + 1)</mn>
+                                </msub>
+                                <mo>&harr;</mo>
+                                <msub>
+                                    <mi>R</mi>
+                                    <mn>@(rs.SecondRow + 1)</mn>
+                                </msub>
+                            </mrow>
+                        </math>
+                        break;
+                    case RowAdditionsSet ras:
+                        {
+                            bool isFirstAddition = true;
+
+                            foreach (var addition in ras.Additions)
+                            {
+                                if (!MathUtils.AreEqual(0, addition.Multiplier, epsilon))
+                                {
+                                    if (!isFirstAddition)
+                                    {
+                                        @: ,
+                                    }
+                                    else
+                                    {
+                                        isFirstAddition = false;
+                                    }
+
+                                    <math>
+                                        <msub>
+                                            <mi>R</mi>
+                                            <mn>@(addition.FirstSummandRow + 1)</mn>
+                                        </msub>
+                                        @if (addition.Multiplier > 0)
+                                        {
+                                            <mo>+</mo>
+                                            if (!MathUtils.AreEqual(addition.Multiplier, 1, epsilon))
+                                            {
+                                                <math-number value="addition.Multiplier"
+                                                             precision="precision" />
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <mo>-</mo>
+                                            if (!MathUtils.AreEqual(addition.Multiplier, -1, epsilon))
+                                            {
+                                                <math-number value="Math.Abs(addition.Multiplier)"
+                                                             precision="precision" />
+                                            }
+                                        }
+                                        <msub>
+                                            <mi>R</mi>
+                                            <mn>@(addition.SecondSummandRow + 1)</mn>
+                                        </msub>
+                                        <mo>&rarr;</mo>
+                                        <msub>
+                                            <mi>R</mi>
+                                            <mn>@(addition.FirstSummandRow + 1)</mn>
+                                        </msub>
+                                    </math>
+                                }
+                            }
+                        }
+                        break;
+                }
+            </p>
+            <p>
+                <math>
+                    <mrow>
+                        <mo>(</mo>
+                        <math-matrix data="operation.Initial" precision="precision" />
+                        <mo>)</mo>
+                    </mrow>
+                    <mo>&rarr;</mo>
+                    <mrow>
+                        <mo>(</mo>
+                        <math-matrix data="operation.Result" precision="precision" />
+                        <mo>)</mo>
+                    </mrow>
+                </math>
+            </p>
+        </li>
+    }
+}

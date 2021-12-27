@@ -6,10 +6,19 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
 {
     public class EquationsSystemSolverByGaussianElimination
     {
+        private class ManySolutions
+        {
+            public Matrix<double> X { get; set; }
+            public List<int> BasicVariablesIndices { get; set; }
+            public List<int> FreeVariablesIndices { get; set; }
+        }
+
         public Matrix<double> A { get; }
         public Matrix<double> B { get; }
         public Matrix<double> X { get; }
         public GaussianElimination GaussianElimination { get; }
+        public List<int> BasicVariablesIndices { get; }
+        public List<int> FreeVariablesIndices { get; }
 
         public EquationsSystemSolverByGaussianElimination(Matrix<double> a, Matrix<double> b)
         {
@@ -30,7 +39,11 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
                 }
                 else 
                 {
-                    X = GetManySolutions(GaussianElimination);
+                    var manySolutions = GetManySolutions(GaussianElimination);
+                    
+                    X = manySolutions.X;
+                    BasicVariablesIndices = manySolutions.BasicVariablesIndices;
+                    FreeVariablesIndices = manySolutions.FreeVariablesIndices;
                 }
             }
             else 
@@ -61,7 +74,7 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
             return X;
         }
 
-        private static Matrix<double> GetManySolutions(GaussianElimination gaussianElimination)
+        private static ManySolutions GetManySolutions(GaussianElimination gaussianElimination)
         {
             int constantsColumn = gaussianElimination.Result.ColumnCount - 1;
             int variablesNumber = gaussianElimination.Result.ColumnCount - 1;
@@ -70,6 +83,7 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
 
             var X = Matrix<double>.Build.Dense(variablesNumber, freeVariablesNumber + 1);
             var basicVariablesIndices = new List<int>();
+            var freeVariablesIndices = new List<int>();
 
             int i = 0;
             int j = 0;
@@ -82,6 +96,7 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
                     MathUtils.AreEqual(gaussianElimination.Result[i, j], 0, MathUtils.Epsilon))
                 {
                     X[j, currentFreeVariableNumber] = 1;
+                    freeVariablesIndices.Add(j);
                     currentFreeVariableNumber++;
                 }
                 else
@@ -108,7 +123,14 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
                 X.SetRow(j, X.Row(j).Divide(gaussianElimination.Result[i, j]));
             }
 
-            return X;
+            var result = new ManySolutions
+            {
+                X = X,
+                BasicVariablesIndices = basicVariablesIndices,
+                FreeVariablesIndices = freeVariablesIndices
+            };
+
+            return result;
         }
     }
 }

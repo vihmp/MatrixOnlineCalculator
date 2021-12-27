@@ -1,83 +1,31 @@
 ﻿@model EquationsSystemSolverByGaussianElimination
+@inject IOptions<MathFormatOptions> mathFormatOptions
 @{
     ViewData["Title"] = "Решение системы уравнений";
-    const int precision = 4;
-    double epsilon = Math.Pow(0.1, 4);
+    int precision = mathFormatOptions.Value.DecimalPrecision;
+    double epsilon = Math.Pow(0.1, precision);
 }
 
 <h1>Решение системы уравнений (метод Гаусса)</h1>
-<p><math><math-equation-system a="Model.A" b="Model.B"/></math></p>
+<p><math><math-equation-system a="Model.A" b="Model.B" /></math></p>
 
 <p>
-    @switch (Model.X.ColumnCount)
+    @if (Model.X.ColumnCount == 0)
     {
-        case 0:
-            @:Нет решений.
-            break;
-        case 1:
-            for (int i = 0; i < Model.X.RowCount; i++)
-            {
-                <math>
-                    <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
-                    <mo>=</mo>
-                    <math-number value="Model.X[i, 0]" precision="precision" />
-                </math>@(i < Model.X.RowCount - 1 ? "," : ".")
-            }
-            break;
-        default:
-            for (int i = 0; i < Model.X.RowCount; i++)
-            {
-                <math>
-                    <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
-                    <mo>=</mo>
-                    @if(Model.X.Row(i).Any(a => !MathUtils.AreEqual(0, a, epsilon)))
-                    {
-                        bool isFirst = true;
-
-                        for(int j = 0; j < Model.X.ColumnCount; j++)
-                        {
-                            if (!MathUtils.AreEqual(Model.X[i, j], 0, epsilon))
-                            {
-                                if (isFirst)
-                                {
-                                    isFirst = false;
-
-                                    if(Model.X[i, j] < 0)
-                                    {
-                                        <mo>-</mo>
-                                    }
-                                }
-                                else
-                                {
-                                    if(Model.X[i, j] > 0)
-                                    {
-                                        <mo>+</mo>
-                                    }
-                                    else
-                                    {
-                                        <mo>-</mo>
-                                    }
-                                }
-
-                                if (!MathUtils.AreEqual(Math.Abs(Model.X[i, j]), 1, epsilon))
-                                {
-                                    <math-number value="Math.Abs(Model.X[i, j])" precision="precision"/>
-                                }
-
-                                if(j > 0)
-                                {
-                                    <msub><mi>c</mi><mn>@j</mn></msub>
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        <mn>0</mn>
-                    }
-                </math>@(i < Model.X.RowCount - 1 ? "," : ".")
-            }
-            break;
+        @:Нет решений.
+    }
+    else
+    {
+        for (int i = 0; i < Model.X.RowCount; i++)
+        {
+            <math>
+                <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
+                <mo>=</mo>
+                @{
+                    await RenderPolynomial(Model.X.Row(i), precision);
+                }
+            </math>@(i < Model.X.RowCount - 1 ? "," : ".")
+        }
     }
 </p>
 
@@ -97,110 +45,14 @@
             </math>
         </p>
     </li>
-    @foreach (var operation in Model.GaussianElimination.ElementaryRowOperations)
-    {
-        if (!operation.Initial.Equals(operation.Result))
-        {
-            <li>
-                <p>
-                    @switch (operation)
-                    {
-                        case RowSwitching rs:
-                            <math>
-                                <mrow>
-                                    <msub>
-                                        <mi>R</mi>
-                                        <mn>@(rs.FirstRow + 1)</mn>
-                                    </msub>
-                                    <mo>&harr;</mo>
-                                    <msub>
-                                        <mi>R</mi>
-                                        <mn>@(rs.SecondRow + 1)</mn>
-                                    </msub>
-                                </mrow>
-                            </math>
-                            break;
-                        case RowAdditionsSet ras:
-                            {
-                                bool isFirstAddition = true;
-
-                                foreach (var addition in ras.Additions)
-                                {
-                                    if (!MathUtils.AreEqual(0, addition.Multiplier, MathUtils.Epsilon))
-                                    {
-                                        if (!isFirstAddition)
-                                        {
-                                            @: ,
-                                        }
-                                        else
-                                        {
-                                            isFirstAddition = false;
-                                        }
-
-                                        <math>
-                                            <msub>
-                                                <mi>R</mi>
-                                                <mn>@(addition.FirstSummandRow + 1)</mn>
-                                            </msub>
-                                            @if (addition.Multiplier > 0)
-                                            {
-                                                <mo>+</mo>
-                                                if (!MathUtils.AreEqual(addition.Multiplier, 1, MathUtils.Epsilon))
-                                                {
-                                                    <math-number value="addition.Multiplier"
-                                                                 precision="precision" />
-                                                }
-                                            }
-                                            else
-                                            {
-                                                <mo>-</mo>
-                                                if (!MathUtils.AreEqual(addition.Multiplier, -1, MathUtils.Epsilon))
-                                                {
-                                                    <math-number value="Math.Abs(addition.Multiplier)"
-                                                                 precision="precision" />
-                                                }
-                                            }
-                                            <msub>
-                                                <mi>R</mi>
-                                                <mn>@(addition.SecondSummandRow + 1)</mn>
-                                            </msub>
-                                            <mo>&rarr;</mo>
-                                            <msub>
-                                                <mi>R</mi>
-                                                <mn>@(addition.FirstSummandRow + 1)</mn>
-                                            </msub>
-                                        </math>
-                                    }
-                                }
-                            }
-                            break;
-                    }
-                </p>
-                <p>
-                    <math>
-                        <mrow>
-                            <mo>(</mo>
-                            <math-matrix data="operation.Initial" precision="precision" />
-                            <mo>)</mo>
-                        </mrow>
-                        <mo>&rarr;</mo>
-                        <mrow>
-                            <mo>(</mo>
-                            <math-matrix data="operation.Result" precision="precision" />
-                            <mo>)</mo>
-                        </mrow>
-                    </math>
-                </p>
-            </li>
-        }
-    }
+    @await Html.PartialAsync("_GaussianElimination", Model.GaussianElimination)
     @{
         int aMatrixRank = Model.A.Rank();
         int augmentedMatrixRank = Model.GaussianElimination.Result.Rank();
 
         <li>
             <p>
-                По полученной матрице найдем ранги матрицы <math><mi>A</mi></math> и расширенной матрицы 
+                По полученной матрице найдем ранги матрицы <math><mi>A</mi></math> и расширенной матрицы
                 <math><mi>A|B</mi></math> (ранг матрицы равен количеству ненулевых строк):
             </p>
             <p>
@@ -229,76 +81,12 @@
                 </p>
             </li>
             <li>
-                @for (int i = Model.X.RowCount - 1; i >= 0; i--)
-                {
-                    <p>
-                        <math>
-                            <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
-                            <mo>=</mo>
-
-                            @if (i < Model.X.RowCount - 1)
-                            {
-                                bool isFirst = true;
-                                var a = new List<double>();
-                                var x = Matrix<double>.Build.Dense(1, 1);
-
-                                a.Add(Model.B[i, 0]);
-                                x[0, 0] = 1;
-                                a.AddRange(Model.GaussianElimination.Result.Row(i)
-                                    .SubVector(i + 1, Model.A.ColumnCount - i - 1));
-                                x = x.Stack(Model.X.SubMatrix(i + 1, Model.A.ColumnCount - i - 1, 0, 1));
-
-                                int nonZeroTermsCount = CalculateNonZeroTermsCount(a, x, epsilon);
-
-                                if (nonZeroTermsCount > 1)
-                                {
-                                    <mo>(</mo>
-                                }
-
-                                if (!MathUtils.AreEqual(Model.B[i, 0], 0, epsilon))
-                                {
-                                    <mn>@Model.B[i, 0]</mn>
-                                    isFirst = false;
-                                }
-
-                                for (int j = i + 1; j < Model.A.ColumnCount; j++)
-                                {
-                                    if (isFirst)
-                                    {
-                                        isFirst = false;
-                                    }
-                                    else
-                                    {
-                                        <mo>+</mo>
-                                    }
-
-                                    <math-number value="-Model.GaussianElimination.Result[i, j]"
-                                                 precision="precision"
-                                                 use-brackets="true" />
-                                    <mo>&sdot;</mo>
-                                    <math-number value="Model.X[j, 0]" precision="precision" use-brackets="true" />
-                                }
-
-                                if (nonZeroTermsCount > 1)
-                                {
-                                    <mo>)</mo>
-                                }
-
-                                if (!MathUtils.AreEqual(Model.GaussianElimination.Result[i, i], 1, epsilon))
-                                {
-                                    <mo>&sdot;</mo>
-                                    <mfrac>
-                                        <mn>1</mn>
-                                        <mn>@Model.GaussianElimination.Result[i, i]</mn>
-                                    </mfrac>
-                                }
-
-                                <mo>=</mo>
-                            }
-
-                            <math-number value="Model.X[i, 0]" precision="precision" />
-                        </math>
-                    </p>
+                <p>Вычислим значения переменных:</p>
+                @{
+                    await RenderBasicVariablesCalculation(
+                        Model,
+                        Enumerable.Range(0, Model.X.RowCount).ToList(),
+                        precision);
                 }
             </li>
         }
@@ -309,6 +97,32 @@
                     Ранг матрицы <math><mi>A</mi></math> и ранг расширенной матрицы равны, но не равны количеству
                     переменных, следовательно, система уравнений имеет множество решений.
                 </p>
+            </li>
+            <li>
+                <p>
+                    Выпишем свободные переменные:
+                </p>
+                    @foreach(var i in Model.FreeVariablesIndices)
+                    {
+                        <p>
+                            <math>
+                                <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
+                                <mo>=</mo>
+                                @{
+                                    await RenderPolynomial(Model.X.Row(i), precision);
+                                }
+                            </math>
+                        </p>
+                    }
+            </li>
+            <li>
+                <p>Выразим базисные переменные через свободные:</p>
+                @{
+                    await RenderBasicVariablesCalculation(
+                        Model,
+                        Model.BasicVariablesIndices,
+                        precision);
+                }
             </li>
         }
     }
@@ -321,19 +135,219 @@
 
 @functions
 {
-    public int CalculateNonZeroTermsCount(List<double> a, Matrix<double> x, double epsilon)
+    public int GetTermsCount(List<double> a, Matrix<double> x, double epsilon)
     {
         int result = 0;
 
-        for(int i = 0; i < a.Count; i++)
+        for (int i = 0; i < a.Count; i++)
         {
-            if(!MathUtils.AreEqual(a[i], 0, epsilon) &&
+            if (!MathUtils.AreEqual(a[i], 0, epsilon) &&
                 x.Row(i).Any(coeff => !MathUtils.AreEqual(coeff, 0, epsilon)))
             {
                 result++;
             }
         }
 
+        if (result == 0)
+        {
+            // The only once term is zero
+            result++;
+        }
+
         return result;
+    }
+
+    public int GetMaxTermLength(List<double> a, Matrix<double> x, double epsilon)
+    {
+        int maxTermLength = 0;
+
+        for (int i = 0; i < a.Count; i++)
+        {
+            if (!MathUtils.AreEqual(a[i], 0, epsilon))
+            {
+                int termLength =
+                    x.Row(i).Count(coeff => !MathUtils.AreEqual(coeff, 0, epsilon));
+
+                if (termLength > maxTermLength)
+                {
+                    maxTermLength = termLength;
+                }
+            }
+        }
+
+        if (maxTermLength == 0)
+        {
+            // The only once term is zero
+            maxTermLength++;
+        }
+
+        return maxTermLength;
+    }
+
+    public async Task RenderPolynomial(Vector<double> coefficients, int precision)
+    {
+        double epsilon = Math.Pow(0.1, precision);
+
+        if (coefficients.Any(c => !MathUtils.AreEqual(c, 0, epsilon)))
+        {
+            bool isFirst = true;
+
+            for (int i = 0; i < coefficients.Count; i++)
+            {
+                if (!MathUtils.AreEqual(coefficients[i], 0, epsilon))
+                {
+                    double coefficient = 0.0;
+
+                    if (isFirst)
+                    {
+                        isFirst = false;
+                        coefficient = coefficients[i];
+                    }
+                    else
+                    {
+                        <mo>@(coefficients[i] > 0 ? "+" : "-")</mo>
+                        coefficient = Math.Abs(coefficients[i]);
+                    }
+
+                    if (i == 0)
+                    {
+                        <math-number value="coefficient" precision="precision" />
+                    }
+                    else
+                    {
+                        if (!MathUtils.AreEqual(coefficient, 1, epsilon))
+                        {
+                            <math-number value="coefficient" precision="precision" />
+                        }
+
+                        <msub><mi>c</mi><mn>@i</mn></msub>
+                    }
+                }
+            }
+        }
+        else
+        {
+            <mn>0</mn>
+        }
+    }
+
+    public async Task RenderPolynomialsSum(
+        List<double> coefficients,
+        Matrix<double> polynomials,
+        int precision)
+    {
+        double epsilon = Math.Pow(0.1, precision);
+        bool isFirst = true;
+
+        for (int i = 0; i < coefficients.Count; i++)
+        {
+            int nonZeroTermsCount =
+                polynomials.Row(i).Count(x => !MathUtils.AreEqual(x, 0, epsilon));
+
+            if (!MathUtils.AreEqual(coefficients[i], 0, epsilon) && (nonZeroTermsCount > 0))
+            {
+                if (isFirst)
+                {
+                    isFirst = false;
+                }
+                else
+                {
+                    <mo>+</mo>
+                }
+
+                if (!MathUtils.AreEqual(coefficients[i], 1, epsilon))
+                {
+                    <math-number value="coefficients[i]" precision="precision" use-brackets="true" />
+                    <mo>&sdot;</mo>
+                }
+
+
+                // Sum of multiple terms or negative constant
+                bool useBrackets = ((nonZeroTermsCount > 1) || (polynomials.Row(i)[0] < 0));
+
+                if (useBrackets)
+                {
+                    <mo>(</mo>
+                }
+
+                await RenderPolynomial(polynomials.Row(i), precision);
+
+                if (useBrackets)
+                {
+                    <mo>)</mo>
+                }
+            }
+        }
+    }
+
+    public async Task RenderBasicVariablesCalculation(
+        EquationsSystemSolverByGaussianElimination solver,
+        List<int> basicVariablesIndices,
+        int precision)
+    {
+        double epsilon = Math.Pow(0.1, precision);
+
+        for (int i = basicVariablesIndices.Count - 1; i >= 0; i--)
+        {
+            int j = basicVariablesIndices[i];
+
+            <p>
+                <math>
+                    <msub><mi>x</mi><mn>@(j + 1)</mn></msub>
+                    <mo>=</mo>
+                    @{
+                        var a = new List<double>();
+                        var x = Matrix<double>.Build.Dense(1, solver.X.ColumnCount);
+
+                        a.Add(1);
+                        x[0, 0] = solver.GaussianElimination.Result.Row(i).Last();
+
+                        a.AddRange(solver.GaussianElimination.Result.Row(i)
+                            .SubVector(j + 1, solver.A.ColumnCount - j - 1)
+                            .Select(coeff => -coeff));
+                        x = x.Stack(solver.X.SubMatrix(
+                            j + 1,
+                            solver.A.ColumnCount - j - 1,
+                            0,
+                            solver.X.ColumnCount));
+
+                        int termsCount = GetTermsCount(a, x, epsilon);
+                        int maxTermLength = GetMaxTermLength(a, x, epsilon);
+                        double denominator = solver.GaussianElimination.Result[i, j];
+
+                        if ((termsCount > 1) || !MathUtils.AreEqual(denominator, 1, epsilon))
+                        {
+                            bool useBrackets = !MathUtils.AreEqual(denominator, 1, epsilon) &&
+                                ((termsCount > 1) || (maxTermLength > 1));
+
+                            if (useBrackets)
+                            {
+                                <mo>(</mo>
+                            }
+
+                            await RenderPolynomialsSum(a, x, precision);
+
+                            if (useBrackets)
+                            {
+                                <mo>)</mo>
+                            }
+
+                            if (!MathUtils.AreEqual(denominator, 1, epsilon))
+                            {
+                                <mo>&sdot;</mo>
+                                <mfrac>
+                                    <mn>1</mn>
+                                    <math-number value="denominator" precision="precision" />
+                                </mfrac>
+                            }
+
+                            <mo>=</mo>
+                        }
+
+                        await RenderPolynomial(solver.X.Row(j), precision);
+                    }
+                </math>
+            </p>
+        }
     }
 }
