@@ -102,18 +102,18 @@
                 <p>
                     Выпишем свободные переменные:
                 </p>
-                    @foreach(var i in Model.FreeVariablesIndices)
-                    {
-                        <p>
-                            <math>
-                                <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
-                                <mo>=</mo>
-                                @{
-                                    await RenderPolynomial(Model.X.Row(i), precision);
-                                }
-                            </math>
-                        </p>
-                    }
+                @foreach (var i in Model.FreeVariablesIndices)
+                {
+                    <p>
+                        <math>
+                            <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
+                            <mo>=</mo>
+                            @{
+                                await RenderPolynomial(Model.X.Row(i), precision);
+                            }
+                        </math>
+                    </p>
+                }
             </li>
             <li>
                 <p>Выразим базисные переменные через свободные:</p>
@@ -155,33 +155,6 @@
         }
 
         return result;
-    }
-
-    public int GetMaxTermLength(List<double> a, Matrix<double> x, double epsilon)
-    {
-        int maxTermLength = 0;
-
-        for (int i = 0; i < a.Count; i++)
-        {
-            if (!MathUtils.AreEqual(a[i], 0, epsilon))
-            {
-                int termLength =
-                    x.Row(i).Count(coeff => !MathUtils.AreEqual(coeff, 0, epsilon));
-
-                if (termLength > maxTermLength)
-                {
-                    maxTermLength = termLength;
-                }
-            }
-        }
-
-        if (maxTermLength == 0)
-        {
-            // The only once term is zero
-            maxTermLength++;
-        }
-
-        return maxTermLength;
     }
 
     public async Task RenderPolynomial(Vector<double> coefficients, int precision)
@@ -237,14 +210,20 @@
         int precision)
     {
         double epsilon = Math.Pow(0.1, precision);
-        bool isFirst = true;
 
-        for (int i = 0; i < coefficients.Count; i++)
+        var polynomialsNonZeroTermsCounts = Enumerable.Range(0, coefficients.Count)
+            .Select(i => polynomials.Row(i).Count(x => !MathUtils.AreEqual(x, 0, epsilon)))
+            .ToList();
+        var renderedPolynomialsIndices = Enumerable.Range(0, coefficients.Count)
+            .Where(i => polynomialsNonZeroTermsCounts[i] > 0)
+            .Where(i => !MathUtils.AreEqual(coefficients[i], 0, epsilon))
+            .ToList();
+
+        if (renderedPolynomialsIndices.Count > 0)
         {
-            int nonZeroTermsCount =
-                polynomials.Row(i).Count(x => !MathUtils.AreEqual(x, 0, epsilon));
+            bool isFirst = true;
 
-            if (!MathUtils.AreEqual(coefficients[i], 0, epsilon) && (nonZeroTermsCount > 0))
+            foreach (var i in renderedPolynomialsIndices)
             {
                 if (isFirst)
                 {
@@ -261,9 +240,9 @@
                     <mo>&sdot;</mo>
                 }
 
-
                 // Sum of multiple terms or negative constant
-                bool useBrackets = ((nonZeroTermsCount > 1) || (polynomials.Row(i)[0] < 0));
+                bool useBrackets = 
+                    ((polynomialsNonZeroTermsCounts[i] > 1) || (polynomials.Row(i)[0] < 0));
 
                 if (useBrackets)
                 {
@@ -277,6 +256,10 @@
                     <mo>)</mo>
                 }
             }
+        }
+        else
+        {
+            <mn>0</mn>
         }
     }
 
@@ -312,13 +295,12 @@
                             solver.X.ColumnCount));
 
                         int termsCount = GetTermsCount(a, x, epsilon);
-                        int maxTermLength = GetMaxTermLength(a, x, epsilon);
                         double denominator = solver.GaussianElimination.Result[i, j];
 
                         if ((termsCount > 1) || !MathUtils.AreEqual(denominator, 1, epsilon))
                         {
-                            bool useBrackets = !MathUtils.AreEqual(denominator, 1, epsilon) &&
-                                ((termsCount > 1) || (maxTermLength > 1));
+                            bool useBrackets =
+                                !MathUtils.AreEqual(denominator, 1, epsilon) && (termsCount > 1);
 
                             if (useBrackets)
                             {
