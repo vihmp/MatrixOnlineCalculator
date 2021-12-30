@@ -1,7 +1,8 @@
 ﻿@model LaplaceExpansion
+@inject IOptions<MathFormatOptions> mathFormatOptions
 @{
     ViewData["Title"] = "Вычисление определителя матрицы";
-    const int precision = 4;
+    int precision = mathFormatOptions.Value.DecimalPrecision;
 }
 
 <h1>Вычисление определителя матрицы (теорема Лапласа)</h1>
@@ -13,7 +14,7 @@
             <mo>|</mo>
         </mrow>
         <mo>=</mo>
-        <math-number value="Model.Determinant" precision="precision"/>
+        <math-number value="Model.Determinant" precision="precision" />
     </math>
 </p>
 
@@ -99,7 +100,7 @@
                                     </mrow>
                                 </msup>
                                 <mo>&sdot;</mo>
-                                <math-number value="step.Expansion.Matrix[0, j]" use-brackets="true"/>
+                                <math-number value="step.Expansion.Matrix[0, j]" use-brackets="true" />
                                 <mo>&sdot;</mo>
                                 <msubsup>
                                     <mi>M</mi>
@@ -124,14 +125,14 @@
                                     <mo>@(j % 2 == 0 ? "+" : "-")</mo>
                                 }
 
-                                <math-number value="step.Expansion.Matrix[0, j]" use-brackets="true"/>
+                                <math-number value="step.Expansion.Matrix[0, j]" use-brackets="true" />
                                 <mo>&sdot;</mo>
                                 <math-number value="step.Expansion.Minors[j].Minor.Determinant"
                                              use-brackets="true"
-                                             precision="precision"/>
+                                             precision="precision" />
                             }
                             <mo>=</mo>
-                            <math-number value="step.Expansion.Determinant" precision="precision"/>
+                            <math-number value="step.Expansion.Determinant" precision="precision" />
                         }
                     </math>
                 </p>
@@ -175,11 +176,11 @@
                                 <mo>&sdot;</mo>
                                 <math-number value="step.Expansion.Minors[j].Minor.Determinant"
                                              use-brackets="true"
-                                             precision="precision"/>
+                                             precision="precision" />
                             }
                             <mo>=</mo>
-                            <math-number value="step.Expansion.Determinant" 
-                                         precision="precision"/>
+                            <math-number value="step.Expansion.Determinant"
+                                         precision="precision" />
                         </math>
                     </p>
 
@@ -194,6 +195,6 @@
 </ol>
 
 @section Scripts
-{ 
+{
     <partial name="_GlobalizationScripts" />
 }
