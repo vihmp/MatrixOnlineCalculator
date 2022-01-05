@@ -1,11 +1,15 @@
-﻿@{
-    ViewData["Title"] = "Вычисление определителя матрицы";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Вычисление определителя матрицы"];
 }
 
-<h1>Вычисление определителя матрицы (метод Гаусса)</h1>
+<h1>@Localizer["Вычисление определителя матрицы (метод Гаусса)"]</h1>
 <form asp-controller="DeterminantCalculation" asp-action="GaussianEliminationResult" method="post">
     <div class="form-group">
-        <label for="matrixSize">Размер матрицы:</label>
+        <label for="matrixSize">@Localizer["Размер матрицы:"]</label>
         <select id="matrixSize" name="matrixSize" class="custom-select">
             @for (int i = 2; i < 11; i++)
             {
@@ -14,7 +18,7 @@
         </select>
     </div>
     <div id="matrix" class="form-group"></div>
-    <input type="submit" class="btn btn-primary" value="Вычислить" />
+    <input type="submit" class="btn btn-primary" value="@Localizer["Вычислить"]" />
 </form>
 
 @section Scripts

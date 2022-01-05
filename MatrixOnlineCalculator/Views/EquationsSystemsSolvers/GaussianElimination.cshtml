@@ -1,11 +1,15 @@
-﻿@{
-    ViewData["Title"] = "Решение системы уравнений";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Решение системы уравнений"];
 }
 
-<h1>Решение системы уравнений (метод Гаусса)</h1>
+<h1>@Localizer["Решение системы уравнений (метод Гаусса)"]</h1>
 <form asp-controller="EquationsSystemsSolvers" asp-action="GaussianEliminationResult" method="post">
     <div class="form-group">
-        <label for="variablesNumber">Количество переменных:</label>
+        <label for="variablesNumber">@Localizer["Количество переменных:"]</label>
         <select id="variablesNumber" name="variablesNumber" class="custom-select">
             @for (int i = 2; i < 8; i++)
             {
@@ -14,7 +18,7 @@
         </select>
     </div>
     <div class="form-group">
-        <label for="equationsNumber">Количество уравнений:</label>
+        <label for="equationsNumber">@Localizer["Количество уравнений:"]</label>
         <select id="equationsNumber" name="equationsNumber" class="custom-select">
             @for (int i = 2; i < 8; i++)
             {
@@ -23,7 +27,7 @@
         </select>
     </div>
     <div id="equationSystem" class="form-group"></div>
-    <input type="submit" class="btn btn-primary" value="Вычислить" />
+    <input type="submit" class="btn btn-primary" value="@Localizer["Найти решение"]" />
 </form>
 
 @section Scripts

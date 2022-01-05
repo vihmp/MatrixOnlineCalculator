@@ -1,27 +1,31 @@
-﻿@{
-    ViewData["Title"] = "Матричный калькулятор";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Матричный калькулятор"];
 }
 
-<h1>Онлайн-калькуляторы</h1>
+<h1>@Localizer["Калькуляторы"]</h1>
 <div>
-    <p>Вычисление определителя матрицы:</p>
+    <p>@Localizer["Вычисление определителя матрицы:"]</p>
     <ul>
         <li>
             <a asp-controller="DeterminantCalculation" asp-action="LaplaceExpansion">
-                С помощью теоремы Лапласа
+                @Localizer["С помощью теоремы Лапласа"]
             </a>
         </li>
         <li>
             <a asp-controller="DeterminantCalculation" asp-action="GaussianElimination">
-                Методом Гаусса
+                @Localizer["Методом Гаусса"]
             </a>
         </li>
     </ul>
-    <p>Решение системы уравнений:</p>
+    <p>@Localizer["Решение системы уравнений:"]</p>
     <ul>
         <li>
             <a asp-controller="EquationsSystemsSolvers" asp-action="GaussianElimination">
-                Методом Гаусса
+                @Localizer["Методом Гаусса"]
             </a>
         </li>
     </ul>

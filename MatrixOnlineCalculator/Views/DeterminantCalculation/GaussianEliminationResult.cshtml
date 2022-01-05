@@ -1,11 +1,16 @@
-﻿@model DeterminantByGaussianElimination
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@model DeterminantByGaussianElimination
+
 @inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "Вычисление определителя матрицы";
+    ViewData["Title"] = Localizer["Вычисление определителя матрицы"];
     int precision = mathFormatOptions.Value.DecimalPrecision;
 }
 
-<h1>Вычисление определителя матрицы (метод Гаусса)</h1>
+<h1>@Localizer["Вычисление определителя матрицы (метод Гаусса)"]</h1>
 <p>
     <math>
         <mrow>
@@ -18,11 +23,11 @@
     </math>
 </p>
 
-<p>Подробное решение:</p>
+<p>@Localizer["Подробное решение:"]</p>
 <ol>
     @await Html.PartialAsync("_GaussianElimination", Model.GaussianElimination)
     <li>
-        <p>Вычислим значение определителя:</p>
+        <p>@Localizer["Вычислим значение определителя:"]</p>
         <p>
             <math>
                 <mrow>

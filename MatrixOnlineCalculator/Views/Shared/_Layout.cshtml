@@ -1,5 +1,9 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer 
+
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -14,12 +18,12 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Home" asp-action="Index">
-                        Главная
+                        @Localizer["Главная"]
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Home" asp-action="Calculators">
-                        Онлайн-калькуляторы
+                        @Localizer["Калькуляторы"]
                     </a>
                 </li>
             </ul>

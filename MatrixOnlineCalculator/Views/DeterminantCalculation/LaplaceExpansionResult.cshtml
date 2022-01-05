@@ -1,11 +1,16 @@
-﻿@model LaplaceExpansion
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@model LaplaceExpansion
+
 @inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "Вычисление определителя матрицы";
+    ViewData["Title"] = Localizer["Вычисление определителя матрицы"];
     int precision = mathFormatOptions.Value.DecimalPrecision;
 }
 
-<h1>Вычисление определителя матрицы (теорема Лапласа)</h1>
+<h1>@Localizer["Вычисление определителя матрицы (теорема Лапласа)"]</h1>
 <p>
     <math>
         <mrow>
@@ -18,7 +23,7 @@
     </math>
 </p>
 
-<p>Подробное решение:</p>
+<p>@Localizer["Подробное решение:"]</p>
 <ol>
     @{
         int index = 0;
@@ -36,7 +41,7 @@
                     <p>
                         @if (step.ParentIndex > 0)
                         {
-                            @: Вычислим значение минора
+                            @Localizer["Вычислим значение минора"]
                             <math>
                                 <msubsup>
                                     <mi>M</mi>
@@ -50,7 +55,7 @@
                                 </msubsup>
                             </math>@: .
                         }
-                        Найдем разложение определителя по первой строке матрицы:
+                        @Localizer["Найдем разложение определителя по первой строке матрицы:"]
                     </p>
                 }
 

@@ -22,9 +22,11 @@ namespace MatrixOnlineCalculator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddViewLocalization();
             services.Configure<MathFormatOptions>(
                 Configuration.GetSection("MathFormatOptions"));
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,17 +48,17 @@ namespace MatrixOnlineCalculator
             app.UseRouting();
             app.UseAuthorization();
 
+            var supportedCultures = new List<CultureInfo>
+            {
+                new CultureInfo("ru"),
+                new CultureInfo("en")
+            };
+
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("ru"),
-                SupportedCultures = new List<CultureInfo>
-                {
-                    new CultureInfo("ru")
-                },
-                SupportedUICultures = new List<CultureInfo>
-                {
-                    new CultureInfo("ru")
-                }
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
             });
 
             app.UseEndpoints(endpoints =>

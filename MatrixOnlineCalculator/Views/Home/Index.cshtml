@@ -1,13 +1,17 @@
-﻿@{
-    ViewData["Title"] = "Матричный калькулятор";
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Матричный калькулятор"];
 }
 
-<h1>Главная</h1>
+<h1>@Localizer["Главная"]</h1>
 <div>
     <ul>
         <li>
             <a asp-controller="Home" asp-action="Calculators">
-                Онлайн-калькуляторы
+                @Localizer["Калькуляторы"]
             </a>
         </li>
     </ul>

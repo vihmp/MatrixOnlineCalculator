@@ -1,18 +1,23 @@
-﻿@model EquationsSystemSolverByGaussianElimination
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@model EquationsSystemSolverByGaussianElimination
+
 @inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IViewLocalizer Localizer
+
 @{
-    ViewData["Title"] = "Решение системы уравнений";
+    ViewData["Title"] = Localizer["Решение системы уравнений"];
     int precision = mathFormatOptions.Value.DecimalPrecision;
     double epsilon = Math.Pow(0.1, precision);
 }
 
-<h1>Решение системы уравнений (метод Гаусса)</h1>
+<h1>@Localizer["Решение системы уравнений (метод Гаусса)"]</h1>
 <p><math><math-equation-system a="Model.A" b="Model.B" /></math></p>
 
 <p>
     @if (Model.X.ColumnCount == 0)
     {
-        @:Нет решений.
+        @Localizer["Нет решений."]
     }
     else
     {
@@ -29,11 +34,11 @@
     }
 </p>
 
-<p>Подробное решение:</p>
+<p>@Localizer["Подробное решение:"]</p>
 <ol>
     <li>
         <p>
-            Построим расширенную матрицу <math><mi>A|B</mi></math>:
+            @Localizer["Построим расширенную матрицу <math><mi>A|B</mi></math>:"]
         </p>
         <p>
             <math>
@@ -51,10 +56,10 @@
         int augmentedMatrixRank = Model.GaussianElimination.Result.Rank();
 
         <li>
-            <p>
-                По полученной матрице найдем ранги матрицы <math><mi>A</mi></math> и расширенной матрицы
-                <math><mi>A|B</mi></math> (ранг матрицы равен количеству ненулевых строк):
-            </p>
+                <p>
+                    @Localizer["По полученной матрице найдем ранги матрицы <math><mi>A</mi></math> и " +
+                    "расширенной матрицы <math><mi>A|B</mi></math> (ранг матрицы равен количеству ненулевых строк):"]
+                </p>
             <p>
                 <math><mi>rangA</mi><mo>=</mo><mn>@aMatrixRank</mn></math>
             </p>
@@ -67,8 +72,8 @@
         {
             <li>
                 <p>
-                    Ранг матрицы <math><mi>A</mi></math> и ранг расширенной матрицы не равны, следовательно, система
-                    уравнений не имеет решений.
+                    @Localizer["Ранг матрицы <math><mi>A</mi></math> и ранг расширенной матрицы не равны, " +
+                    "следовательно, система уравнений не имеет решений."]
                 </p>
             </li>
         }
@@ -76,12 +81,12 @@
         {
             <li>
                 <p>
-                    Ранг матрицы <math><mi>A</mi></math> и ранг расширенной матрицы равны количеству переменных,
-                    следовательно, система уравнений имеет единственное решение.
+                    @Localizer["Ранг матрицы <math><mi>A</mi></math> и ранг расширенной матрицы равны количеству " +
+                    "переменных, следовательно, система уравнений имеет единственное решение."]
                 </p>
             </li>
             <li>
-                <p>Вычислим значения переменных:</p>
+                <p>@Localizer["Вычислим значения переменных:"]</p>
                 @{
                     await RenderBasicVariablesCalculation(
                         Model,
@@ -94,14 +99,12 @@
         {
             <li>
                 <p>
-                    Ранг матрицы <math><mi>A</mi></math> и ранг расширенной матрицы равны, но не равны количеству
-                    переменных, следовательно, система уравнений имеет множество решений.
+                    @Localizer["Ранг матрицы <math><mi>A</mi></math> и ранг расширенной матрицы равны, но " +
+                    "не равны количеству переменных, следовательно, система уравнений имеет множество решений."]
                 </p>
             </li>
             <li>
-                <p>
-                    Выпишем свободные переменные:
-                </p>
+                <p>@Localizer["Выпишем свободные переменные:"]</p>
                 @foreach (var i in Model.FreeVariablesIndices)
                 {
                     <p>
@@ -116,7 +119,7 @@
                 }
             </li>
             <li>
-                <p>Выразим базисные переменные через свободные:</p>
+                <p>@Localizer["Выразим базисные переменные через свободные:"]</p>
                 @{
                     await RenderBasicVariablesCalculation(
                         Model,
@@ -241,7 +244,7 @@
                 }
 
                 // Sum of multiple terms or negative constant
-                bool useBrackets = 
+                bool useBrackets =
                     ((polynomialsNonZeroTermsCounts[i] > 1) || (polynomials.Row(i)[0] < 0));
 
                 if (useBrackets)
