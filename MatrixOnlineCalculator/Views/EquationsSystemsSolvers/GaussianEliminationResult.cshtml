@@ -1,4 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@using MatrixOnlineCalculator.Models
+@using MatrixOnlineCalculator.Models.EquationsSystemsSolvers
+@using MatrixOnlineCalculator.Models.Options
+@using MathNet.Numerics.LinearAlgebra
 
 @model EquationsSystemSolverByGaussianElimination
 
@@ -56,10 +61,10 @@
         int augmentedMatrixRank = Model.GaussianElimination.Result.Rank();
 
         <li>
-                <p>
-                    @Localizer["По полученной матрице найдем ранги матрицы <math><mi>A</mi></math> и " +
-                    "расширенной матрицы <math><mi>A|B</mi></math> (ранг матрицы равен количеству ненулевых строк):"]
-                </p>
+            <p>
+                @Localizer["По полученной матрице найдем ранги матрицы <math><mi>A</mi></math> и " +
+                "расширенной матрицы <math><mi>A|B</mi></math> (ранг матрицы равен количеству ненулевых строк):"]
+            </p>
             <p>
                 <math><mi>rangA</mi><mo>=</mo><mn>@aMatrixRank</mn></math>
             </p>

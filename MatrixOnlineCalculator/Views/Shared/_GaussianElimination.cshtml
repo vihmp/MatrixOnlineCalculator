@@ -1,5 +1,13 @@
-﻿@model GaussianElimination
+﻿@using Microsoft.Extensions.Options
+@using MatrixOnlineCalculator.Models
+@using MatrixOnlineCalculator.Models.GaussianEliminationCalculation
+@using MatrixOnlineCalculator.Models.GaussianEliminationCalculation.ElementaryRowOperations
+@using MatrixOnlineCalculator.Models.Options
+
+@model GaussianElimination
+
 @inject IOptions<MathFormatOptions> mathFormatOptions
+
 @{
     int precision = mathFormatOptions.Value.DecimalPrecision;
     double epsilon = Math.Pow(0.1, precision);
