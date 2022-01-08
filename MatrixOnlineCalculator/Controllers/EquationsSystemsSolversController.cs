@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MatrixOnlineCalculator.Controllers
 {
-    public class EquationsSystemsSolvers : Controller
+    public class EquationsSystemsSolversController : Controller
     {
         public IActionResult GaussianElimination()
         {
