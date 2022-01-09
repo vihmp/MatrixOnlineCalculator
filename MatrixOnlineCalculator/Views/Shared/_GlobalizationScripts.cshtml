@@ -1,4 +1,6 @@
-﻿<script src="~/lib/cldrjs/dist/cldr.js"></script>
+﻿@using System.Globalization
+
+<script src="~/lib/cldrjs/dist/cldr.js"></script>
 <script src="~/lib/cldrjs/dist/cldr/event.js"></script>
 <script src="~/lib/cldrjs/dist/cldr/supplemental.js"></script>
 
@@ -9,13 +11,13 @@
     $.when(
         $.getJSON("/lib/cldr-data/supplemental/likelySubtags.json"),
         $.getJSON("/lib/cldr-data/supplemental/numberingSystems.json"),
-        $.getJSON("/lib/cldr-data/main/ru/numbers.json")
+        $.getJSON("/lib/cldr-data/main/@CultureInfo.CurrentCulture.Name/numbers.json")
     ).then(function () {
         // Normalize $.get results, we only need the JSON, not the request statuses.
         return [].slice.apply(arguments, [0]).map(function (result) {
             return result[0];
         });
     }).then(Globalize.load).then(function () {
-        Globalize.locale("ru");
+        Globalize.locale("@CultureInfo.CurrentCulture.Name");
     });
 </script>

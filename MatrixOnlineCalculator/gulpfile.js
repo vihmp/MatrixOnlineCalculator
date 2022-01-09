@@ -33,7 +33,8 @@ function copy(cb) {
     let paths = [
         { in: "./node_modules/cldr-data/supplemental/likelySubtags.json", out: "./wwwroot/lib/cldr-data/supplemental" },
         { in: "./node_modules/cldr-data/supplemental/numberingSystems.json", out: "./wwwroot/lib/cldr-data/supplemental" },
-        { in: "./node_modules/cldr-data/main/ru/numbers.json", out: "./wwwroot/lib/cldr-data/main/ru" }
+        { in: "./node_modules/cldr-data/main/ru/numbers.json", out: "./wwwroot/lib/cldr-data/main/ru" },
+        { in: "./node_modules/cldr-data/main/en/numbers.json", out: "./wwwroot/lib/cldr-data/main/en" }
     ];
 
     return merge(
