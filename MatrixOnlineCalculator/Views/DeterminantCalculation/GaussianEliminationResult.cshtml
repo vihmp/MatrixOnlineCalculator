@@ -2,6 +2,7 @@
 @using Microsoft.Extensions.Options
 @using MatrixOnlineCalculator.Models.DeterminantCalculation
 @using MatrixOnlineCalculator.Models.Options
+@using MatrixOnlineCalculator.Models.GaussianEliminationCalculation.ElementaryRowOperations 
 
 @model DeterminantByGaussianElimination
 
@@ -29,31 +30,67 @@
 <p>@Localizer["Подробное решение:"]</p>
 <ol>
     @await Html.PartialAsync("_GaussianElimination", Model.GaussianElimination)
-    <li>
-        <p>@Localizer["Вычислим значение определителя:"]</p>
-        <p>
-            <math>
-                <mrow>
-                    <mo>|</mo>
-                    <math-matrix data="Model.GaussianElimination.Initial" />
-                    <mo>|</mo>
-                </mrow>
-                <mo>=</mo>
-                @for (int i = 0; i < Model.GaussianElimination.Initial.RowCount; i++)
+    @{
+        int rowSwitchingNumber = Model.GaussianElimination.ElementaryRowOperations
+                .OfType<RowSwitching>()
+                .Count();
+
+        <li>
+            <p>
+                @Localizer["Количество перестановок строк в матрице: {0}.", rowSwitchingNumber]
+                @if ((rowSwitchingNumber % 2) == 0)
                 {
-                    if (i > 0)
+                    @Localizer["Знак определителя не изменился."]
+                }
+                else
+                {
+                    @Localizer["Знак определителя изменился на противоположный."]
+                }
+            </p>
+        </li>
+        <li>
+            <p>@Localizer["Вычислим значение определителя:"]</p>
+            <p>
+                <math>
+                    <mrow>
+                        <mo>|</mo>
+                        <math-matrix data="Model.GaussianElimination.Initial" />
+                        <mo>|</mo>
+                    </mrow>
+                    <mo>=</mo>
+                    <mrow>
+                        @if ((rowSwitchingNumber % 2) != 0)
+                        {
+                            <mo>-</mo>
+                        }
+                        <mo>|</mo>
+                        <math-matrix data="Model.GaussianElimination.Result" />
+                        <mo>|</mo>
+                    </mrow>
+                    <mo>=</mo>
+                    @if ((rowSwitchingNumber % 2) != 0)
                     {
+                        <math-number value="-1"
+                                     use-brackets="true" />
                         <mo>&sdot;</mo>
                     }
-                    <math-number value="Model.GaussianElimination.Result[i, i]"
-                                 precision="precision"
-                                 use-brackets="true" />
-                }
-                <mo>=</mo>
-                <math-number value="Model.Determinant" precision="precision" />
-            </math>
-        </p>
-    </li>
+                    @for (int i = 0; i < Model.GaussianElimination.Initial.RowCount; i++)
+                    {
+                        if (i > 0)
+                        {
+                            <mo>&sdot;</mo>
+                        }
+                        <math-number value="Model.GaussianElimination.Result[i, i]"
+                                     precision="precision"
+                                     use-brackets="true" />
+                    }
+                    <mo>=</mo>
+                    <math-number value="Model.Determinant" precision="precision" />
+                </math>
+            </p>
+        </li>
+    }
+
 </ol>
 
 @section Scripts
