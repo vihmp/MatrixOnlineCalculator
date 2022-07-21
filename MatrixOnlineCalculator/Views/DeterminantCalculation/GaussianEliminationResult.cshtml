@@ -38,6 +38,7 @@
         <li>
             <p>
                 @Localizer["Количество перестановок строк в матрице: {0}.", rowSwitchingNumber]
+                
                 @if ((rowSwitchingNumber % 2) == 0)
                 {
                     @Localizer["Знак определителя не изменился."]
@@ -64,7 +65,8 @@
                             <mo>-</mo>
                         }
                         <mo>|</mo>
-                        <math-matrix data="Model.GaussianElimination.Result" />
+                        <math-matrix data="Model.GaussianElimination.Result" 
+                                     precision="precision"/>
                         <mo>|</mo>
                     </mrow>
                     <mo>=</mo>
@@ -90,7 +92,6 @@
             </p>
         </li>
     }
-
 </ol>
 
 @section Scripts
