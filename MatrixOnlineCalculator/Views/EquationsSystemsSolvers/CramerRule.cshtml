@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Решение системы уравнений"];
+}
+
+<h1>@Localizer["Решение системы уравнений (метод Крамера)"]</h1>
+<form asp-controller="EquationsSystemsSolvers" asp-action="CramerRuleResult" method="post">
+    <div class="form-group">
+        <label for="variablesNumber">@Localizer["Количество переменных:"]</label>
+        <select id="variablesNumber" name="variablesNumber" class="custom-select">
+            @for (int i = 2; i < 6; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+    <div id="equationSystem" class="form-group"></div>
+    <input type="submit" class="btn btn-primary" value="@Localizer["Найти решение"]" />
+</form>
+
+@section Scripts
+{
+    <partial name="_GlobalizationScripts" />
+    <partial name="_ValidationScripts" />
+    <script>
+        $(function () {
+            $("#variablesNumber").val(3);
+            $("#equationSystem").html(renderEquationsSystemInput(3, 3, "a", "b"));
+
+            $("#variablesNumber").change(function () {
+                $("#equationSystem").empty()
+                    .html(renderEquationsSystemInput($(this).val(), $(this).val(), "a", "b"));
+            });
+
+            $("form").validate({
+                errorPlacement: function () { }
+            });
+
+            $("[name^=a]").each(function () {
+                $(this).rules("add", {
+                    required: true,
+                    number: true
+                });
+            });
+
+            $("[name^=b]").each(function () {
+                $(this).rules("add", {
+                    required: true,
+                    number: true
+                });
+            });
+        });
+    </script>
+}

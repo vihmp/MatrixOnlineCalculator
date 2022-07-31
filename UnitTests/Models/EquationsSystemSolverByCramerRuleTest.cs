@@ -3,6 +3,7 @@ using NUnit.Framework;
 using MatrixOnlineCalculator.Models.EquationsSystemsSolvers;
 using System.Linq;
 using MatrixOnlineCalculator.Models;
+using System.Collections.Generic;
 
 namespace UnitTests.Models
 {
@@ -28,19 +29,13 @@ namespace UnitTests.Models
                 new double[] { 6 }
             });
 
-            var expected = Matrix<double>.Build.DenseOfRowArrays(new double[][]
-            {
-                new double[] { 1 },
-                new double[] { 1 },
-                new double[] { -1 },
-                new double[] { -1 }
-            });
+            var expected = new List<double>() { 1, 1, -1, -1 };
 
             var actual = new EquationsSystemSolverByCramerRule(a, b);
 
-            for (int i = 0; i < expected.RowCount; i++)
+            for (int i = 0; i < expected.Count; i++)
             {
-                Assert.AreEqual(expected[i, 0], actual.X[i, 0], 0.0001);
+                Assert.AreEqual(expected[i], actual.X[i], 0.0001);
             }
         }
 
@@ -63,7 +58,7 @@ namespace UnitTests.Models
 
             var actual = new EquationsSystemSolverByCramerRule(a, b);
 
-            Assert.AreEqual(0, actual.X.RowCount);
+            Assert.AreEqual(0, actual.X.Count);
             Assert.AreEqual(0, actual.Determinants[0].Determinant, 0.0001);
             Assert.IsTrue(
                 actual.Determinants.Any(
@@ -89,7 +84,7 @@ namespace UnitTests.Models
 
             var actual = new EquationsSystemSolverByCramerRule(a, b);
 
-            Assert.AreEqual(0, actual.X.RowCount);
+            Assert.AreEqual(0, actual.X.Count);
             Assert.AreEqual(0, actual.Determinants[0].Determinant, 0.0001);
             Assert.IsTrue(
                 actual.Determinants.All(

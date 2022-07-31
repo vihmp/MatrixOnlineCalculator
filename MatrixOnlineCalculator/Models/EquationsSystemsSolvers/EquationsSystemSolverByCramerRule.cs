@@ -8,14 +8,16 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
     {
         public Matrix<double> A { get; }
         public Matrix<double> B { get; }
-        public Matrix<double> X { get; }
+        public List<double> X { get; }
         public List<DeterminantByGaussianElimination> Determinants { get; }
 
         public EquationsSystemSolverByCramerRule(Matrix<double> a, Matrix<double> b)
         {
             A = a;
             B = b;
+            X = new List<double>();
             Determinants = new List<DeterminantByGaussianElimination>();
+            
             Determinants.Add(new DeterminantByGaussianElimination(a));
 
             for (int j = 0; j < a.ColumnCount; j++)
@@ -32,16 +34,10 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
 
             if (!MathUtils.AreEqual(Determinants[0].Determinant, 0, MathUtils.Epsilon))
             {
-                X = Matrix<double>.Build.Dense(Determinants.Count - 1, 1);
-
-                for (int i = 0; i < Determinants.Count - 1; i++)
+                for (int i = 1; i < Determinants.Count; i++)
                 {
-                    X[i, 0] = Determinants[i + 1].Determinant / Determinants[0].Determinant;
+                    X.Add(Determinants[i].Determinant / Determinants[0].Determinant);
                 }
-            }
-            else
-            {
-                X = Matrix<double>.Build.Dense(0, 0);
             }
         }
     }

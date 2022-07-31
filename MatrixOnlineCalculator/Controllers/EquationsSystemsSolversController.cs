@@ -26,5 +26,25 @@ namespace MatrixOnlineCalculator.Controllers
 
             return View(equationSystemSolver);
         }
+
+        public IActionResult CramerRule()
+        {
+            return View();
+        }
+
+        public IActionResult CramerRuleResult(
+            int variablesNumber,
+            double[] a,
+            double[] b)
+        {
+            var aMatrix =
+                Matrix<double>.Build.DenseOfRowMajor(variablesNumber, variablesNumber, a);
+            var bMatrix =
+                Matrix<double>.Build.DenseOfRowMajor(variablesNumber, 1, b);
+            var equationSystemSolver =
+                new EquationsSystemSolverByCramerRule(aMatrix, bMatrix);
+
+            return View(equationSystemSolver);
+        }
     }
 }
