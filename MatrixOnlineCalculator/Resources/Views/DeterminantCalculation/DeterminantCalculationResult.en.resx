@@ -120,13 +120,7 @@
   <data name="Вычисление определителя матрицы" xml:space="preserve">
     <value>Matrix determinant calculation</value>
   </data>
-  <data name="Вычисление определителя матрицы (метод Гаусса)" xml:space="preserve">
-    <value>Matrix determinant calculation (Gaussian elimination)</value>
-  </data>
-  <data name="Вычислить" xml:space="preserve">
-    <value>Calculate</value>
-  </data>
-  <data name="Размер матрицы:" xml:space="preserve">
-    <value>Matrix size:</value>
+  <data name="Подробное решение:" xml:space="preserve">
+    <value>Detailed solution:</value>
   </data>
 </root>

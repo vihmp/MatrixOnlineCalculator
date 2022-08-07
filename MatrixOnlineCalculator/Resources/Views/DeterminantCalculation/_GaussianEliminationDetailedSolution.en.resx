@@ -117,19 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Вычисление определителя матрицы" xml:space="preserve">
-    <value>Matrix determinant calculation</value>
+  <data name="Вычислим значение определителя:" xml:space="preserve">
+    <value>Calculate value of matrix determinant:</value>
   </data>
-  <data name="Вычисление определителя матрицы (теорема Лапласа)" xml:space="preserve">
-    <value>Matrix determinant calculation (Laplace expansion)</value>
+  <data name="Знак определителя изменился на противоположный." xml:space="preserve">
+    <value>Determinant changed its sign.</value>
   </data>
-  <data name="Вычислим значение минора" xml:space="preserve">
-    <value>Calculate minor</value>
+  <data name="Знак определителя не изменился." xml:space="preserve">
+    <value>Determinant didn't change its sign.</value>
   </data>
-  <data name="Найдем разложение определителя по первой строке матрицы:" xml:space="preserve">
-    <value>Compute determinant of matrix by using the Laplace expansion along the first row:</value>
-  </data>
-  <data name="Подробное решение:" xml:space="preserve">
-    <value>Detailed solution:</value>
+  <data name="Количество перестановок строк в матрице: {0}." xml:space="preserve">
+    <value>Number of row interchanges in matrix: {0}.</value>
   </data>
 </root>

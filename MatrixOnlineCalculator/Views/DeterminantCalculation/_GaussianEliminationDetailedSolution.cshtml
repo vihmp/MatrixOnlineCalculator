@@ -2,43 +2,25 @@
 @using Microsoft.Extensions.Options
 @using MatrixOnlineCalculator.Models.DeterminantCalculation
 @using MatrixOnlineCalculator.Models.Options
-@using MatrixOnlineCalculator.Models.GaussianEliminationCalculation.ElementaryRowOperations 
+@using MatrixOnlineCalculator.Models.GaussianEliminationCalculation.ElementaryRowOperations
 
 @model DeterminantByGaussianElimination
 
-@inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IOptions<MathFormatOptions> MathFormatOptions
 @inject IViewLocalizer Localizer
 
-@{
-    ViewData["Title"] = Localizer["Вычисление определителя матрицы"];
-    int precision = mathFormatOptions.Value.DecimalPrecision;
-}
-
-<h1>@Localizer["Вычисление определителя матрицы (метод Гаусса)"]</h1>
-<p>
-    <math>
-        <mrow>
-            <mo>|</mo>
-            <math-matrix data="Model.GaussianElimination.Initial" />
-            <mo>|</mo>
-        </mrow>
-        <mo>=</mo>
-        <math-number value="Model.Determinant" precision="precision" />
-    </math>
-</p>
-
-<p>@Localizer["Подробное решение:"]</p>
 <ol>
     @await Html.PartialAsync("_GaussianElimination", Model.GaussianElimination)
     @{
+        int precision = MathFormatOptions.Value.DecimalPrecision;
         int rowSwitchingNumber = Model.GaussianElimination.ElementaryRowOperations
-                .OfType<RowSwitching>()
-                .Count();
+            .OfType<RowSwitching>()
+            .Count();
 
         <li>
             <p>
                 @Localizer["Количество перестановок строк в матрице: {0}.", rowSwitchingNumber]
-                
+
                 @if ((rowSwitchingNumber % 2) == 0)
                 {
                     @Localizer["Знак определителя не изменился."]
@@ -65,8 +47,8 @@
                             <mo>-</mo>
                         }
                         <mo>|</mo>
-                        <math-matrix data="Model.GaussianElimination.Result" 
-                                     precision="precision"/>
+                        <math-matrix data="Model.GaussianElimination.Result"
+                                     precision="precision" />
                         <mo>|</mo>
                     </mrow>
                     <mo>=</mo>
@@ -87,14 +69,10 @@
                                      use-brackets="true" />
                     }
                     <mo>=</mo>
-                    <math-number value="Model.Determinant" precision="precision" />
+                    <math-number value="Model.Determinant" 
+                                 precision="precision" />
                 </math>
             </p>
         </li>
     }
 </ol>
-
-@section Scripts
-{
-    <partial name="_GlobalizationScripts" />
-}

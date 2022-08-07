@@ -6,10 +6,10 @@
 
 @model GaussianElimination
 
-@inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IOptions<MathFormatOptions> MathFormatOptions
 
 @{
-    int precision = mathFormatOptions.Value.DecimalPrecision;
+    int precision = MathFormatOptions.Value.DecimalPrecision;
     double epsilon = Math.Pow(0.1, precision);
 }
 
@@ -96,13 +96,15 @@
                 <math>
                     <mrow>
                         <mo>(</mo>
-                        <math-matrix data="operation.Initial" precision="precision" />
+                        <math-matrix data="operation.Initial" 
+                                     precision="precision" />
                         <mo>)</mo>
                     </mrow>
                     <mo>&rarr;</mo>
                     <mrow>
                         <mo>(</mo>
-                        <math-matrix data="operation.Result" precision="precision" />
+                        <math-matrix data="operation.Result" 
+                                     precision="precision" />
                         <mo>)</mo>
                     </mrow>
                 </math>

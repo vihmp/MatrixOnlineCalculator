@@ -3,11 +3,11 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace MatrixOnlineCalculator.Models.DeterminantCalculation
 {
-    public class LaplaceExpansion
+    public class LaplaceExpansion : IDeterminantCalculation
     {
-        public Matrix<double> Matrix { get; private set; }
-        public double Determinant { get; private set; }
-        public List<(int Row, int Column, LaplaceExpansion Minor)> Minors { get; private set; }
+        public Matrix<double> Matrix { get; }
+        public double Determinant { get; }
+        public List<(int Row, int Column, LaplaceExpansion Minor)> Minors { get; }
 
         public LaplaceExpansion(Matrix<double> matrix)
         {

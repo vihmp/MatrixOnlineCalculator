@@ -120,22 +120,10 @@
   <data name="Вычисление определителя матрицы" xml:space="preserve">
     <value>Matrix determinant calculation</value>
   </data>
-  <data name="Вычисление определителя матрицы (метод Гаусса)" xml:space="preserve">
-    <value>Matrix determinant calculation (Gaussian elimination)</value>
+  <data name="Вычислить" xml:space="preserve">
+    <value>Calculate</value>
   </data>
-  <data name="Вычислим значение определителя:" xml:space="preserve">
-    <value>Calculate value of matrix determinant:</value>
-  </data>
-  <data name="Знак определителя изменился на противоположный." xml:space="preserve">
-    <value>Determinant changed its sign.</value>
-  </data>
-  <data name="Знак определителя не изменился." xml:space="preserve">
-    <value>Determinant didn't change its sign.</value>
-  </data>
-  <data name="Количество перестановок строк в матрице: {0}." xml:space="preserve">
-    <value>Number of row interchanges in matrix: {0}.</value>
-  </data>
-  <data name="Подробное решение:" xml:space="preserve">
-    <value>Detailed solution:</value>
+  <data name="Размер матрицы:" xml:space="preserve">
+    <value>Matrix size:</value>
   </data>
 </root>

@@ -117,16 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Вычисление определителя матрицы" xml:space="preserve">
-    <value>Matrix determinant calculation</value>
+  <data name="Вычислим значение минора" xml:space="preserve">
+    <value>Calculate minor</value>
   </data>
-  <data name="Вычисление определителя матрицы (теорема Лапласа)" xml:space="preserve">
-    <value>Matrix determinant calculation (Laplace expansion)</value>
-  </data>
-  <data name="Вычислить" xml:space="preserve">
-    <value>Calculate</value>
-  </data>
-  <data name="Размер матрицы:" xml:space="preserve">
-    <value>Matrix size:</value>
+  <data name="Найдем разложение определителя по первой строке матрицы:" xml:space="preserve">
+    <value>Compute determinant of matrix by using the Laplace expansion along the first row:</value>
   </data>
 </root>

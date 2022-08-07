@@ -5,11 +5,17 @@ using System.Linq;
 
 namespace MatrixOnlineCalculator.Models.DeterminantCalculation
 {
-    public class DeterminantByGaussianElimination
+    public class DeterminantByGaussianElimination : IDeterminantCalculation
     {
         public double Determinant { get; }
-
         public GaussianElimination GaussianElimination { get; }
+        public Matrix<double> Matrix 
+        { 
+            get
+            {
+                return GaussianElimination.Initial;
+            }
+        }
 
         public DeterminantByGaussianElimination(Matrix<double> matrix)
         {

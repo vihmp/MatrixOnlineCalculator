@@ -1,4 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using MatrixOnlineCalculator.ViewModels.DeterminantCalculation 
+
+@model DeterminantCalculationFormViewModel
 
 @inject IViewLocalizer Localizer
 
@@ -6,12 +9,12 @@
     ViewData["Title"] = Localizer["Вычисление определителя матрицы"];
 }
 
-<h1>@Localizer["Вычисление определителя матрицы (метод Гаусса)"]</h1>
-<form asp-controller="DeterminantCalculation" asp-action="GaussianEliminationResult" method="post">
+<h1>@Localizer["Вычисление определителя матрицы"] (@Localizer[Model.MethodName])</h1>
+<form asp-controller="DeterminantCalculation" asp-action="@Model.ActionName" method="post">
     <div class="form-group">
         <label for="matrixSize">@Localizer["Размер матрицы:"]</label>
         <select id="matrixSize" name="matrixSize" class="custom-select">
-            @for (int i = 2; i < 11; i++)
+            @for (int i = Model.MinMatrixSize; i <= Model.MaxMatrixSize; i++)
             {
                 <option value="@i">@(i)x@(i)</option>
             }
@@ -27,8 +30,8 @@
     <partial name="_ValidationScripts" />
     <script>
         $(function () {
-            $("#matrixSize").val(3);
-            $("#matrix").html(renderMatrixInput(3, 3, "matrixData"));
+            $("#matrixSize").val(@Model.DefaultMatrixSize);
+            $("#matrix").html(renderMatrixInput(@Model.DefaultMatrixSize, @Model.DefaultMatrixSize, "matrixData"));
 
             $("#matrixSize").change(function () {
                 $("#matrix").empty()
