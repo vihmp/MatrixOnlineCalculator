@@ -7,7 +7,6 @@ namespace MatrixOnlineCalculator.TagHelpers
     public class MathEquationSystemTagHelper : TagHelper
     {
         public Matrix<double> A { get; set; }
-
         public Matrix<double> B { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)

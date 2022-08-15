@@ -9,7 +9,6 @@ namespace MatrixOnlineCalculator.TagHelpers
     public class MathMatrixTagHelper : TagHelper
     {
         public Matrix<double> Data { get; set; }
-
         public int? Precision { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
@@ -17,11 +16,11 @@ namespace MatrixOnlineCalculator.TagHelpers
             output.TagName = "mtable";
             output.TagMode = TagMode.StartTagAndEndTag;
 
-            for(int i = 0; i < Data.RowCount; i++)
+            for (int i = 0; i < Data.RowCount; i++)
             {
                 var row = new StringBuilder();
 
-                for(int j = 0; j < Data.ColumnCount; j++)
+                for (int j = 0; j < Data.ColumnCount; j++)
                 {
                     double value = Data[i, j];
 
