@@ -129,6 +129,9 @@
   <data name="Методом Гаусса" xml:space="preserve">
     <value>Gaussian elimination</value>
   </data>
+  <data name="Методом Крамера" xml:space="preserve">
+    <value>Cramer's rule</value>
+  </data>
   <data name="Решение системы уравнений:" xml:space="preserve">
     <value>Solution of linear equations system:</value>
   </data>

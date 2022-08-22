@@ -1,4 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using MatrixOnlineCalculator.ViewModels.EquationsSystemsSolvers 
+
+@model EquationsSystemsSolverFormViewModel
 
 @inject IViewLocalizer Localizer
 
@@ -6,12 +9,21 @@
     ViewData["Title"] = Localizer["Решение системы уравнений"];
 }
 
-<h1>@Localizer["Решение системы уравнений (метод Крамера)"]</h1>
-<form asp-controller="EquationsSystemsSolvers" asp-action="CramerRuleResult" method="post">
+<h1>@Localizer["Решение системы уравнений"] (@Model.MethodName)</h1>
+<form asp-controller="EquationsSystemsSolvers" asp-action="@Model.ActionName" method="post">
     <div class="form-group">
         <label for="variablesNumber">@Localizer["Количество переменных:"]</label>
         <select id="variablesNumber" name="variablesNumber" class="custom-select">
-            @for (int i = 2; i < 6; i++)
+            @for (int i = Model.MinVariablesNumber; i <= Model.MaxVariablesNumber; i++)
+            {
+                <option value="@i">@i</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="equationsNumber">@Localizer["Количество уравнений:"]</label>
+        <select id="equationsNumber" name="equationsNumber" class="custom-select">
+            @for (int i = Model.MinEquationsNumber; i <= Model.MaxEquationsNumber; i++)
             {
                 <option value="@i">@i</option>
             }
@@ -27,12 +39,18 @@
     <partial name="_ValidationScripts" />
     <script>
         $(function () {
-            $("#variablesNumber").val(3);
-            $("#equationSystem").html(renderEquationsSystemInput(3, 3, "a", "b"));
+            $("#variablesNumber").val(@Model.DefaultVariablesNumber);
+            $("#equationsNumber").val(@Model.DefaultEquationsNumber);
+            $("#equationSystem").html(renderEquationsSystemInput(@Model.DefaultEquationsNumber, @Model.DefaultVariablesNumber, "a", "b"));
 
             $("#variablesNumber").change(function () {
                 $("#equationSystem").empty()
-                    .html(renderEquationsSystemInput($(this).val(), $(this).val(), "a", "b"));
+                    .html(renderEquationsSystemInput($("#equationsNumber").val(), $(this).val(), "a", "b"));
+            });
+
+            $("#equationsNumber").change(function () {
+                $("#equationSystem").empty()
+                    .html(renderEquationsSystemInput($(this).val(), $("#variablesNumber").val(), "a", "b"));
             });
 
             $("form").validate({

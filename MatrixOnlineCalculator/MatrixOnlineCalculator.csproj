@@ -8,8 +8,4 @@
     <PackageReference Include="MathNet.Numerics" Version="4.15.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ViewModels\EquationSystemSolvers\" />
-  </ItemGroup>
-
 </Project>

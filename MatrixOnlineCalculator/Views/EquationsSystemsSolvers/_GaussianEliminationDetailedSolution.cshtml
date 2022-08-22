@@ -1,0 +1,185 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Html
+@using Microsoft.Extensions.Options
+@using MatrixOnlineCalculator.Models
+@using MatrixOnlineCalculator.Models.EquationsSystemsSolvers
+@using MatrixOnlineCalculator.Models.Options
+@using MatrixOnlineCalculator.HtmlHelpers
+
+@model EquationsSystemsSolverByGaussianElimination
+
+@inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IViewLocalizer Localizer
+
+@{
+    int precision = mathFormatOptions.Value.DecimalPrecision;
+    double epsilon = Math.Pow(0.1, precision);
+}
+
+<ol>
+    <li>
+        <p>
+            @Localizer["Построим расширенную матрицу <math><mi>A|B</mi></math>:"]
+        </p>
+        <p>
+            <math>
+                <mrow>
+                    <mo>(</mo>
+                    <math-matrix data="Model.GaussianElimination.Initial"
+                                 precision="precision" />
+                    <mo>)</mo>
+                </mrow>
+            </math>
+        </p>
+    </li>
+    @await Html.PartialAsync("_GaussianElimination", Model.GaussianElimination)
+    <li>
+        <p>
+            @Localizer["По полученной матрице найдем ранги матрицы <math><mi>A</mi></math> и " +
+            "расширенной матрицы <math><mi>A|B</mi></math> (ранг матрицы равен количеству ненулевых строк):"]
+        </p>
+        <p>
+            <math>
+                <mi>rangA</mi>
+                <mo>=</mo>
+                <mn>@Model.A.Rank()</mn>
+            </math>
+        </p>
+        <p>
+            <math>
+                <mi>rangA|B</mi>
+                <mo>=</mo>
+                <mn>@Model.GaussianElimination.Result.Rank()</mn>
+            </math>
+        </p>
+    </li>
+    @switch (Model.SolutionsNumber)
+    {
+        case SolutionsNumber.NoSolution:
+            <li>
+                <p>
+                    @Localizer["Ранг матрицы <math><mi>A</mi></math> и ранг расширенной матрицы не равны, " +
+                    "следовательно, система уравнений не имеет решений."]
+                </p>
+            </li>
+            break;
+        case SolutionsNumber.SingleSolution:
+            <li>
+                <p>
+                    @Localizer["Ранг матрицы <math><mi>A</mi></math> и ранг расширенной матрицы равны количеству " +
+                    "переменных, следовательно, система уравнений имеет единственное решение."]
+                </p>
+            </li>
+            <li>
+                <p>@Localizer["Вычислим значения переменных:"]</p>
+                @BasicVariablesCalculation(Model, precision)
+            </li>
+            break;
+        case SolutionsNumber.InfinitelyManySolutions:
+            <li>
+                <p>
+                    @Localizer["Ранг матрицы <math><mi>A</mi></math> и ранг расширенной матрицы равны, но " +
+                    "не равны количеству переменных, следовательно, система уравнений имеет множество решений."]
+                </p>
+            </li>
+            <li>
+                <p>@Localizer["Выпишем свободные переменные:"]</p>
+                @foreach (var i in Model.FreeVariablesIndices)
+                {
+                    <p>
+                        <math>
+                            <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
+                            <mo>=</mo>
+                            <math-polynomial coefficients="Model.X.Row(i)"
+                                             precision="precision" />
+                        </math>
+                    </p>
+                }
+            </li>
+            <li>
+                <p>@Localizer["Выразим базисные переменные через свободные:"]</p>
+                @BasicVariablesCalculation(Model, precision)
+            </li>
+            break;
+    }
+</ol>
+
+@section Scripts
+{
+    <partial name="_GlobalizationScripts" />
+}
+
+@functions
+{
+    public IHtmlContent BasicVariablesCalculation(
+        EquationsSystemsSolverByGaussianElimination solver,
+        int precision)
+    {
+        double epsilon = Math.Pow(0.1, precision);
+
+        var result = new HtmlContentBuilder();
+
+        foreach (var calculation in solver.BasicVariablesCalculation)
+        {
+            var paragraphTag = new TagBuilder("p");
+            var mathTag = new TagBuilder("math");
+
+            mathTag.InnerHtml.AppendHtml(
+                $"<msub><mi>x</mi><mn>{calculation.CalculatedVariableIndex}</mn></msub>");
+            mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
+
+            if (!MathUtils.AreEqual(calculation.Divider, 1, epsilon))
+            {
+                var mfracTag = new TagBuilder("mfrac");
+
+                mfracTag.InnerHtml.AppendHtml("<mn>1</mn>");
+                mfracTag.InnerHtml.AppendHtml(
+                    MathHtmlHelper.Number(
+                        calculation.Divider,
+                        false,
+                        precision));
+
+                mathTag.InnerHtml.AppendHtml(mfracTag);
+                mathTag.InnerHtml.AppendHtml("<mo>&sdot;</mo>");
+            }
+
+            var nonZeroCoeffsCount = calculation.PolynomCoefficients
+                .Where(x => !MathUtils.AreEqual(x, 0, epsilon))
+                .Count();
+
+            bool useBrackets =
+                !MathUtils.AreEqual(calculation.Divider, 1, epsilon) ||
+                (nonZeroCoeffsCount > 1);
+
+            if (useBrackets)
+            {
+                mathTag.InnerHtml.AppendHtml(
+                    "<mo stretchy=false>(</mo>");
+            }
+
+            mathTag.InnerHtml.AppendHtml(
+            MathHtmlHelper.Polynomial(
+                calculation.PolynomCoefficients,
+                "x",
+                precision));
+
+            if (useBrackets)
+            {
+                mathTag.InnerHtml.AppendHtml(
+                    "<mo stretchy=false>)</mo>");
+            }
+
+            mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
+            mathTag.InnerHtml.AppendHtml(
+                MathHtmlHelper.Polynomial(
+                    solver.X.Row(calculation.CalculatedVariableIndex),
+                    "c",
+                    precision));
+
+            paragraphTag.InnerHtml.SetHtmlContent(mathTag);
+            result.AppendHtml(paragraphTag);
+        }
+
+        return result;
+    }
+}

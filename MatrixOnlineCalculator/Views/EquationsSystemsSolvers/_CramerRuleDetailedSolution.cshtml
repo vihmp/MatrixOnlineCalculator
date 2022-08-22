@@ -1,0 +1,137 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@using MatrixOnlineCalculator.Models.EquationsSystemsSolvers
+@using MatrixOnlineCalculator.Models.Options
+@using MatrixOnlineCalculator.Models
+
+@model EquationsSystemsSolverByCramerRule
+
+@inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IViewLocalizer Localizer
+
+@{
+    int precision = mathFormatOptions.Value.DecimalPrecision;
+    double epsilon = Math.Pow(0.1, precision);
+}
+
+<ol>
+    @for (int i = 0; i < Model.Determinants.Count; i++)
+    {
+        var determinant = Model.Determinants[i];
+
+        <li>
+            <p>
+                <math>
+                    <msub>
+                        <mi>&Delta;</mi>
+                        <mn>@i</mn>
+                    </msub>
+                    <mo>=</mo>
+                    <mrow>
+                        <mo>|</mo>
+                        <math-matrix data="determinant.Matrix" />
+                        <mo>|</mo>
+                    </mrow>
+                    <mo>=</mo>
+                    <math-number value="determinant.Determinant"
+                                 precision="precision" />
+                </math>
+            </p>
+        </li>
+    }
+    <li>
+        @switch (Model.SolutionsNumber)
+        {
+            case SolutionsNumber.NoSolution:
+                int nonZeroDeltaIndex = Model.Determinants
+                    .FindIndex(x => !MathUtils.AreEqual(x.Determinant, 0, MathUtils.Epsilon));
+
+                <p>
+                    <math>
+                        <msub>
+                            <mi>&Delta;</mi>
+                            <mn>0</mn>
+                        </msub>
+                        <mo>=</mo>
+                        <mn>0</mn>
+                    </math>
+                </p>
+                <p>
+                    <math>
+                        <msub>
+                            <mi>&Delta;</mi>
+                            <mn>@nonZeroDeltaIndex</mn>
+                        </msub>
+                        <mo>&ne;</mo>
+                        <mn>0</mn>
+                    </math>
+                </p>
+                <p>
+                    @Localizer["Система уравнений не имеет решений."]
+                </p>
+                break;
+            case SolutionsNumber.SingleSolution:
+                <p>
+                    <math>
+                        <msub>
+                            <mi>&Delta;</mi>
+                            <mn>0</mn>
+                        </msub>
+                        <mo>&ne;</mo>
+                        <mn>0</mn>
+                    </math>
+                </p>
+                <p>
+                    @Localizer["Система уравнений имеет единственное решение."]
+                </p>
+                @for (int i = 1; i < Model.Determinants.Count; i++)
+                {
+                    <p>
+                        <math>
+                            <msub><mi>x</mi><mn>@i</mn></msub>
+                            <mo>=</mo>
+                            <mfrac>
+                                <msub>
+                                    <mi>&Delta;</mi>
+                                    <mn>@i</mn>
+                                </msub>
+                                <msub>
+                                    <mi>&Delta;</mi>
+                                    <mn>0</mn>
+                                </msub>
+                            </mfrac>
+                            <mo>=</mo>
+                            <mfrac>
+                                <math-number value="Model.Determinants[i].Determinant"
+                                             precision="precision" />
+                                <math-number value="Model.Determinants[0].Determinant"
+                                             precision="precision" />
+                            </mfrac>
+                            <mo>=</mo>
+                            <math-number value="Model.X[i - 1, 0]"
+                                         precision="precision" />
+                        </math>
+                    </p>
+                }
+                break;
+            case SolutionsNumber.InfinitelyManySolutions:
+                <p>
+                    <math>
+                        @for (int i = 0; i < Model.Determinants.Count; i++)
+                        {
+                            <msub>
+                                <mi>&Delta;</mi>
+                                <mn>@i</mn>
+                            </msub>
+                            <mo>=</mo>
+                        }
+                        <mn>0</mn>
+                    </math>
+                </p>
+                <p>
+                    @Localizer["Система уравнений имеет множество решений."]
+                </p>
+                break;
+        }
+    </li>
+</ol>

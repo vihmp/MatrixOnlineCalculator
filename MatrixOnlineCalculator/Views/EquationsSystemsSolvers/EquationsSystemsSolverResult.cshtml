@@ -1,0 +1,76 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Options
+@using MatrixOnlineCalculator.Models.Options
+@using MatrixOnlineCalculator.Models.EquationsSystemsSolvers
+@using MatrixOnlineCalculator.ViewModels.EquationsSystemsSolvers
+
+@model EquationsSystemsSolverResultViewModel
+
+@inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["Решение системы уравнений"];
+    int precision = mathFormatOptions.Value.DecimalPrecision;
+    double epsilon = Math.Pow(0.1, precision);
+}
+
+<h1>@Localizer["Решение системы уравнений"] (@Model.MethodName)</h1>
+<p>
+    <math>
+        <math-equation-system a="Model.DetailedSolution.A"
+                              b="Model.DetailedSolution.B" />
+    </math>
+</p>
+<p>@Localizer["Ответ:"]</p>
+@switch (Model.DetailedSolution.SolutionsNumber)
+{
+    case SolutionsNumber.NoSolution:
+        <p>
+            @Localizer["Система уравнений не имеет решений."]
+        </p>
+        break;
+    case SolutionsNumber.InfinitelyManySolutions:
+        <p>
+            @Localizer["Система уравнений имеет множество решений."]
+        </p>
+        @if (Model.DetailedSolution.X.ColumnCount != 0)
+        {
+            <p>
+                @for (int i = 0; i < Model.DetailedSolution.X.RowCount; i++)
+                {
+                    <math>
+                        <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
+                        <mo>=</mo>
+                        <math-polynomial coefficients="Model.DetailedSolution.X.Row(i)"
+                                         precision="precision" />
+                    </math>@(i < Model.DetailedSolution.X.RowCount - 1 ? "," : ".")
+                }
+            </p>
+        }
+        break;
+    case SolutionsNumber.SingleSolution:
+        <p>
+            @Localizer["Система уравнений имеет единственное решение."]
+        </p>
+        <p>
+            @for (int i = 0; i < Model.DetailedSolution.X.RowCount; i++)
+            {
+                <math>
+                    <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
+                    <mo>=</mo>
+                    <math-number value="Model.DetailedSolution.X[i,0]"
+                                 precision="precision" />
+                </math>@(i < Model.DetailedSolution.X.RowCount - 1 ? "," : ".")
+            }
+        </p>
+        break;
+}
+
+<p>@Localizer["Подробное решение:"]</p>
+@await Html.PartialAsync(Model.DetailedSolutionViewName, Model.DetailedSolution)
+
+@section Scripts
+{
+    <partial name="_GlobalizationScripts" />
+}

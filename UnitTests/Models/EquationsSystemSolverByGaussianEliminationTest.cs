@@ -5,10 +5,10 @@ using MatrixOnlineCalculator.Models.EquationsSystemsSolvers;
 namespace UnitTests.Models
 {
     [TestFixture]
-    class EquationsSystemSolverByGaussianEliminationTest
+    class EquationsSystemsSolverByGaussianEliminationTest
     {
         [Test]
-        public void EquationsSystemSolverByGaussianEliminationOneSolution()
+        public void EquationsSystemsSolverByGaussianEliminationOneSolution()
         {
             var a = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
@@ -34,7 +34,7 @@ namespace UnitTests.Models
                 new double[] { -1 }
             });
 
-            var actual = new EquationsSystemSolverByGaussianElimination(a, b);
+            var actual = new EquationsSystemsSolverByGaussianElimination(a, b);
 
             Assert.AreEqual(1, actual.X.ColumnCount);
 
@@ -42,10 +42,12 @@ namespace UnitTests.Models
             {
                 Assert.AreEqual(expected[i, 0], actual.X[i, 0], 0.0001);
             }
+
+            Assert.AreEqual(SolutionsNumber.SingleSolution, actual.SolutionsNumber);
         }
 
         [Test]
-        public void EquationsSystemSolverByGaussianEliminationOneSolutionMoreRows()
+        public void EquationsSystemsSolverByGaussianEliminationOneSolutionMoreRows()
         {
             var a = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
@@ -70,7 +72,7 @@ namespace UnitTests.Models
                 new double[] { 1 }
             });
 
-            var actual = new EquationsSystemSolverByGaussianElimination(a, b);
+            var actual = new EquationsSystemsSolverByGaussianElimination(a, b);
 
             Assert.AreEqual(1, actual.X.ColumnCount);
 
@@ -78,10 +80,12 @@ namespace UnitTests.Models
             {
                 Assert.AreEqual(expected[i, 0], actual.X[i, 0], 0.0001);
             }
+
+            Assert.AreEqual(SolutionsNumber.SingleSolution, actual.SolutionsNumber);
         }
 
         [Test]
-        public void EquationsSystemSolverByGaussianEliminationNoSolution()
+        public void EquationsSystemsSolverByGaussianEliminationNoSolution()
         {
             var a = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
@@ -97,13 +101,14 @@ namespace UnitTests.Models
                 new double[] { 3 }
             });
 
-            var actual = new EquationsSystemSolverByGaussianElimination(a, b);
+            var actual = new EquationsSystemsSolverByGaussianElimination(a, b);
 
             Assert.AreEqual(0, actual.X.RowCount);
+            Assert.AreEqual(SolutionsNumber.NoSolution, actual.SolutionsNumber);
         }
 
         [Test]
-        public void EquationsSystemSolverByGaussianEliminationManySolutions()
+        public void EquationsSystemsSolverByGaussianEliminationManySolutions()
         {
             var a = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
@@ -130,7 +135,7 @@ namespace UnitTests.Models
                 new double[] { 0, 0, 1 }
             });
 
-            var actual = new EquationsSystemSolverByGaussianElimination(a, b);
+            var actual = new EquationsSystemsSolverByGaussianElimination(a, b);
 
             Assert.AreEqual(3, actual.X.ColumnCount);
 
@@ -141,10 +146,12 @@ namespace UnitTests.Models
                     Assert.AreEqual(expected[i, j], actual.X[i, j], 0.0001);
                 }
             }
+
+            Assert.AreEqual(SolutionsNumber.InfinitelyManySolutions, actual.SolutionsNumber);
         }
 
         [Test]
-        public void EquationsSystemSolverByGaussianEliminationManySolutionsMoreColumns()
+        public void EquationsSystemsSolverByGaussianEliminationManySolutionsMoreColumns()
         {
             var a = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
@@ -169,7 +176,7 @@ namespace UnitTests.Models
                 new double[] { 0, 0, 1 }
             });
 
-            var actual = new EquationsSystemSolverByGaussianElimination(a, b);
+            var actual = new EquationsSystemsSolverByGaussianElimination(a, b);
 
             Assert.AreEqual(3, actual.X.ColumnCount);
 
@@ -180,10 +187,12 @@ namespace UnitTests.Models
                     Assert.AreEqual(expected[i, j], actual.X[i, j], 0.0001);
                 }
             }
+
+            Assert.AreEqual(SolutionsNumber.InfinitelyManySolutions, actual.SolutionsNumber);
         }
 
         [Test]
-        public void EquationsSystemSolverByGaussianEliminationManySolutionsMoreRows()
+        public void EquationsSystemsSolverByGaussianEliminationManySolutionsMoreRows()
         {
             var a = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
@@ -214,7 +223,7 @@ namespace UnitTests.Models
                 new double[] { 0, 0, 1 }
             });
 
-            var actual = new EquationsSystemSolverByGaussianElimination(a, b);
+            var actual = new EquationsSystemsSolverByGaussianElimination(a, b);
 
             Assert.AreEqual(3, actual.X.ColumnCount);
 
@@ -225,6 +234,8 @@ namespace UnitTests.Models
                     Assert.AreEqual(expected[i, j], actual.X[i, j], 0.0001);
                 }
             }
+
+            Assert.AreEqual(SolutionsNumber.InfinitelyManySolutions, actual.SolutionsNumber);
         }
     }
 }

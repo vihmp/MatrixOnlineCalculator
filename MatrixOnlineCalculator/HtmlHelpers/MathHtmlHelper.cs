@@ -3,15 +3,13 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.Encodings.Web;
 
 namespace MatrixOnlineCalculator.HtmlHelpers
 {
     public static class MathHtmlHelper
     {
-        public static HtmlString Number(
+        public static IHtmlContent Number(
             double value, 
             bool? useBrackets = null, 
             int? precision = null)
@@ -49,24 +47,17 @@ namespace MatrixOnlineCalculator.HtmlHelpers
                 mrowTag.InnerHtml.AppendHtml(valueTag);
                 mrowTag.InnerHtml.AppendHtml(closingBracketTag);
 
-                using (var writer = new StringWriter())
-                {
-                    mrowTag.WriteTo(writer, HtmlEncoder.Default);
-                    return new HtmlString(writer.ToString());
-                }
+                return mrowTag;
             }
             else
             {
-                using (var writer = new StringWriter())
-                {
-                    valueTag.WriteTo(writer, HtmlEncoder.Default);
-                    return new HtmlString(writer.ToString());
-                }
+                return valueTag;
             }
         }
 
-        public static HtmlString Polynom(
+        public static IHtmlContent Polynomial(
             IEnumerable<double> coefficients,
+            string variableName,
             int? precision)
         {
             double epsilon = (precision != null) ? 
@@ -91,31 +82,41 @@ namespace MatrixOnlineCalculator.HtmlHelpers
             }
 
             result.AppendHtml(
-                PolynomTerm(Math.Abs(firstTerm.Coefficient), firstTerm.Index, precision));
+                PolynomialTerm(
+                    Math.Abs(firstTerm.Coefficient), 
+                    firstTerm.Index, 
+                    variableName,
+                    precision));
 
             foreach (var term in terms.Skip(1))
             {
                 var operation = term.Coefficient > 0 ? "+" : "-";
                 result.AppendHtml($"<mo>{operation}</mo>");
                 result.AppendHtml(
-                    PolynomTerm(Math.Abs(term.Coefficient), term.Index, precision));
+                    PolynomialTerm(
+                        Math.Abs(term.Coefficient), 
+                        term.Index, 
+                        variableName,
+                        precision));
             }
 
-            using (var writer = new StringWriter())
-            {
-                result.WriteTo(writer, HtmlEncoder.Default);
-                return new HtmlString(writer.ToString());
-            }
+            return result;
         }
 
-        private static IHtmlContent PolynomTerm(
+        private static IHtmlContent PolynomialTerm(
             double coefficient, 
             int index, 
+            string variableName,
             int? precision)
         {
             double epsilon = (precision != null) ?
                 Math.Pow(0.1, (int)precision) :
                 MathUtils.Epsilon;
+
+            if (string.IsNullOrWhiteSpace(variableName))
+            {
+                variableName = "c";
+            }
 
             var result = new HtmlContentBuilder();
 
@@ -132,7 +133,8 @@ namespace MatrixOnlineCalculator.HtmlHelpers
                         Number(coefficient, true, precision));
                 }
 
-                result.AppendHtml($"<msub><mi>c</mi><mn>{index}</mn></msub>");
+                result.AppendHtml(
+                    $"<msub><mi>{variableName}</mi><mn>{index}</mn></msub>");
             }
 
             return result;

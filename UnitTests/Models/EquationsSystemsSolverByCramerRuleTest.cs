@@ -3,15 +3,14 @@ using NUnit.Framework;
 using MatrixOnlineCalculator.Models.EquationsSystemsSolvers;
 using System.Linq;
 using MatrixOnlineCalculator.Models;
-using System.Collections.Generic;
 
 namespace UnitTests.Models
 {
     [TestFixture]
-    class EquationsSystemSolverByCramerRuleTest
+    class EquationsSystemsSolverByCramerRuleTest
     {
         [Test]
-        public void EquationsSystemSolverByCramerRuleOneSolution()
+        public void EquationsSystemsSolverByCramerRuleOneSolution()
         {
             var a = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
@@ -29,18 +28,26 @@ namespace UnitTests.Models
                 new double[] { 6 }
             });
 
-            var expected = new List<double>() { 1, 1, -1, -1 };
-
-            var actual = new EquationsSystemSolverByCramerRule(a, b);
-
-            for (int i = 0; i < expected.Count; i++)
+            var expected = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
-                Assert.AreEqual(expected[i], actual.X[i], 0.0001);
+                new double[] { 1 },
+                new double[] { 1 },
+                new double[] { -1 },
+                new double[] { -1 }
+            });
+
+            var actual = new EquationsSystemsSolverByCramerRule(a, b);
+
+            for (int i = 0; i < expected.RowCount; i++)
+            {
+                Assert.AreEqual(expected[i, 0], actual.X[i, 0], 0.0001);
             }
+
+            Assert.AreEqual(SolutionsNumber.SingleSolution, actual.SolutionsNumber);
         }
 
         [Test]
-        public void EquationsSystemSolverByCramerRuleNoSolutions()
+        public void EquationsSystemsSolverByCramerRuleNoSolutions()
         {
             var a = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
@@ -56,17 +63,18 @@ namespace UnitTests.Models
                 new double[] { 3 }
             });
 
-            var actual = new EquationsSystemSolverByCramerRule(a, b);
+            var actual = new EquationsSystemsSolverByCramerRule(a, b);
 
-            Assert.AreEqual(0, actual.X.Count);
+            Assert.AreEqual(0, actual.X.RowCount);
             Assert.AreEqual(0, actual.Determinants[0].Determinant, 0.0001);
             Assert.IsTrue(
                 actual.Determinants.Any(
                     x => !MathUtils.AreEqual(x.Determinant, 0, 0.0001)));
+            Assert.AreEqual(SolutionsNumber.NoSolution, actual.SolutionsNumber);
         }
 
         [Test]
-        public void EquationsSystemSolverByCramerRuleManySolutions()
+        public void EquationsSystemsSolverByCramerRuleManySolutions()
         {
             var a = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
@@ -82,13 +90,14 @@ namespace UnitTests.Models
                 new double[] { 0 }
             });
 
-            var actual = new EquationsSystemSolverByCramerRule(a, b);
+            var actual = new EquationsSystemsSolverByCramerRule(a, b);
 
-            Assert.AreEqual(0, actual.X.Count);
+            Assert.AreEqual(0, actual.X.RowCount);
             Assert.AreEqual(0, actual.Determinants[0].Determinant, 0.0001);
             Assert.IsTrue(
                 actual.Determinants.All(
                     x => MathUtils.AreEqual(x.Determinant, 0, 0.0001)));
+            Assert.AreEqual(SolutionsNumber.InfinitelyManySolutions, actual.SolutionsNumber);
         }
     }
 }
