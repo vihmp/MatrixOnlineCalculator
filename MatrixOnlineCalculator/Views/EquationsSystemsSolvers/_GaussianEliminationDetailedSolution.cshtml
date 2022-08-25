@@ -128,48 +128,53 @@
                 $"<msub><mi>x</mi><mn>{calculation.CalculatedVariableIndex}</mn></msub>");
             mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
 
-            if (!MathUtils.AreEqual(calculation.Divider, 1, epsilon))
-            {
-                var mfracTag = new TagBuilder("mfrac");
-
-                mfracTag.InnerHtml.AppendHtml("<mn>1</mn>");
-                mfracTag.InnerHtml.AppendHtml(
-                    MathHtmlHelper.Number(
-                        calculation.Divider,
-                        false,
-                        precision));
-
-                mathTag.InnerHtml.AppendHtml(mfracTag);
-                mathTag.InnerHtml.AppendHtml("<mo>&sdot;</mo>");
-            }
-
             var nonZeroCoeffsCount = calculation.PolynomCoefficients
                 .Where(x => !MathUtils.AreEqual(x, 0, epsilon))
                 .Count();
 
-            bool useBrackets =
-                !MathUtils.AreEqual(calculation.Divider, 1, epsilon) ||
-                (nonZeroCoeffsCount > 1);
-
-            if (useBrackets)
+            if (!MathUtils.AreEqual(calculation.Divider, 1, epsilon) ||
+                (nonZeroCoeffsCount > 1))
             {
+                if (!MathUtils.AreEqual(calculation.Divider, 1, epsilon))
+                {
+                    var mfracTag = new TagBuilder("mfrac");
+
+                    mfracTag.InnerHtml.AppendHtml("<mn>1</mn>");
+                    mfracTag.InnerHtml.AppendHtml(
+                        MathHtmlHelper.Number(
+                            calculation.Divider,
+                            false,
+                            precision));
+
+                    mathTag.InnerHtml.AppendHtml(mfracTag);
+                    mathTag.InnerHtml.AppendHtml("<mo>&sdot;</mo>");
+                }
+
+                bool useBrackets =
+                    !MathUtils.AreEqual(calculation.Divider, 1, epsilon) &&
+                    (nonZeroCoeffsCount > 1);
+
+                if (useBrackets)
+                {
+                    mathTag.InnerHtml.AppendHtml(
+                        "<mo stretchy=false>(</mo>");
+                }
+
                 mathTag.InnerHtml.AppendHtml(
-                    "<mo stretchy=false>(</mo>");
+                MathHtmlHelper.Polynomial(
+                    calculation.PolynomCoefficients,
+                    "x",
+                    precision));
+
+                if (useBrackets)
+                {
+                    mathTag.InnerHtml.AppendHtml(
+                        "<mo stretchy=false>)</mo>");
+                }
+
+                mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
             }
 
-            mathTag.InnerHtml.AppendHtml(
-            MathHtmlHelper.Polynomial(
-                calculation.PolynomCoefficients,
-                "x",
-                precision));
-
-            if (useBrackets)
-            {
-                mathTag.InnerHtml.AppendHtml(
-                    "<mo stretchy=false>)</mo>");
-            }
-
-            mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
             mathTag.InnerHtml.AppendHtml(
                 MathHtmlHelper.Polynomial(
                     solver.X.Row(calculation.CalculatedVariableIndex),
