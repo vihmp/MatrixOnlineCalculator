@@ -43,7 +43,7 @@ namespace UnitTests.Models
                 Assert.AreEqual(expected[i, 0], actual.X[i, 0], 0.0001);
             }
 
-            Assert.AreEqual(SolutionsNumber.SingleSolution, actual.SolutionsNumber);
+            Assert.AreEqual(SolutionsNumber.OneSolution, actual.SolutionsNumber);
         }
 
         [Test]

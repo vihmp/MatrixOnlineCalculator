@@ -2,25 +2,16 @@
 using MatrixOnlineCalculator.Models.DeterminantCalculation;
 using MatrixOnlineCalculator.ViewModels.DeterminantCalculation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 
 namespace MatrixOnlineCalculator.Controllers
 {
     public class DeterminantCalculationController : Controller
     {
-        private IStringLocalizer<DeterminantCalculationController> localizer;
-
-        public DeterminantCalculationController(
-            IStringLocalizer<DeterminantCalculationController> localizer)
-        {
-            this.localizer = localizer;
-        }
-
         public IActionResult LaplaceExpansion()
         {
             var viewModel = new DeterminantCalculationFormViewModel()
             {
-                MethodName = localizer["теорема Лапласа"],
+                MethodName = "теорема Лапласа",
                 ActionName = "LaplaceExpansionResult",
                 MinMatrixSize = 2,
                 MaxMatrixSize = 5,
@@ -41,7 +32,7 @@ namespace MatrixOnlineCalculator.Controllers
 
             var viewModel = new DeterminantCalculationResultViewModel()
             {
-                MethodName = localizer["теорема Лапласа"],
+                MethodName = "теорема Лапласа",
                 DetailedSolution = solution,
                 DetailedSolutionViewName = "_LaplaceExpansionDetailedSolution"
             };
@@ -53,7 +44,7 @@ namespace MatrixOnlineCalculator.Controllers
         {
             var viewModel = new DeterminantCalculationFormViewModel()
             {
-                MethodName = localizer["метод Гаусса"],
+                MethodName = "метод Гаусса",
                 ActionName = "GaussianEliminationResult",
                 MinMatrixSize = 2,
                 MaxMatrixSize = 10,
@@ -74,7 +65,7 @@ namespace MatrixOnlineCalculator.Controllers
 
             var viewModel = new DeterminantCalculationResultViewModel()
             {
-                MethodName = localizer["метод Гаусса"],
+                MethodName = "метод Гаусса",
                 DetailedSolution = solution,
                 DetailedSolutionViewName = "_GaussianEliminationDetailedSolution"
             };

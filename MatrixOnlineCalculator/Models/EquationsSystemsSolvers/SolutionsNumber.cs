@@ -3,7 +3,7 @@
     public enum SolutionsNumber
     {
         NoSolution,
-        SingleSolution,
+        OneSolution,
         InfinitelyManySolutions
     }
 }

@@ -123,13 +123,16 @@
   <data name="Количество уравнений:" xml:space="preserve">
     <value>Equations number:</value>
   </data>
+  <data name="метод Гаусса" xml:space="preserve">
+    <value>Gaussian elimination</value>
+  </data>
+  <data name="метод Крамера" xml:space="preserve">
+    <value>Cramer's rule</value>
+  </data>
   <data name="Найти решение" xml:space="preserve">
     <value>Solve</value>
   </data>
   <data name="Решение системы уравнений" xml:space="preserve">
     <value>Solution of linear equations system</value>
-  </data>
-  <data name="Решение системы уравнений (метод Гаусса)" xml:space="preserve">
-    <value>Solution of linear equations system (Gaussian elimination)</value>
   </data>
 </root>

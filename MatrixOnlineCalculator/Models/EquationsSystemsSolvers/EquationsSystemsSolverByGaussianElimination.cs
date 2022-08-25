@@ -39,7 +39,7 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
             {
                 if(augmentedMatrixRank == a.ColumnCount)
                 {
-                    SolutionsNumber = SolutionsNumber.SingleSolution;
+                    SolutionsNumber = SolutionsNumber.OneSolution;
                 }
                 else 
                 {

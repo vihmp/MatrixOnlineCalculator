@@ -123,7 +123,13 @@
   <data name="Вычислить" xml:space="preserve">
     <value>Calculate</value>
   </data>
+  <data name="метод Гаусса" xml:space="preserve">
+    <value>Gaussian elimination</value>
+  </data>
   <data name="Размер матрицы:" xml:space="preserve">
     <value>Matrix size:</value>
+  </data>
+  <data name="теорема Лапласа" xml:space="preserve">
+    <value>Laplace expansion</value>
   </data>
 </root>

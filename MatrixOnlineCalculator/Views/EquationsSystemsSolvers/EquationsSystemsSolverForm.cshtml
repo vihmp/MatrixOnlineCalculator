@@ -9,7 +9,7 @@
     ViewData["Title"] = Localizer["Решение системы уравнений"];
 }
 
-<h1>@Localizer["Решение системы уравнений"] (@Model.MethodName)</h1>
+<h1>@Localizer["Решение системы уравнений"] (@Localizer[Model.MethodName])</h1>
 <form asp-controller="EquationsSystemsSolvers" asp-action="@Model.ActionName" method="post">
     <div class="form-group">
         <label for="variablesNumber">@Localizer["Количество переменных:"]</label>

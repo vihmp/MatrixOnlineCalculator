@@ -43,7 +43,7 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
                     X[i, 0] = Determinants[i + 1].Determinant / Determinants[0].Determinant;
                 }
 
-                SolutionsNumber = SolutionsNumber.SingleSolution;
+                SolutionsNumber = SolutionsNumber.OneSolution;
             }
             else
             {

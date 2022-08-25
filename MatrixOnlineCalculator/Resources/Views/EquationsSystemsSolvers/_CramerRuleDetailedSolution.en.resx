@@ -117,10 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="метод Гаусса" xml:space="preserve">
-    <value>Gaussian elimination</value>
+  <data name="Система уравнений имеет единственное решение." xml:space="preserve">
+    <value>System of equations has one solution.</value>
   </data>
-  <data name="теорема Лапласа" xml:space="preserve">
-    <value>Laplace expansion</value>
+  <data name="Система уравнений имеет множество решений." xml:space="preserve">
+    <value>System of equations has infinitely many solutions.</value>
+  </data>
+  <data name="Система уравнений не имеет решений." xml:space="preserve">
+    <value>System of equations has no solution.</value>
   </data>
 </root>

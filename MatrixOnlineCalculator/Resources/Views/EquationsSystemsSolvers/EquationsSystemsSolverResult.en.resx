@@ -117,40 +117,28 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Выпишем свободные переменные:" xml:space="preserve">
-    <value>Choose free variables:</value>
+  <data name="метод Гаусса" xml:space="preserve">
+    <value>Gaussian elimination</value>
   </data>
-  <data name="Выразим базисные переменные через свободные:" xml:space="preserve">
-    <value>Express the basic variables in terms of the free variables:</value>
+  <data name="метод Крамера" xml:space="preserve">
+    <value>Cramer's rule</value>
   </data>
-  <data name="Вычислим значения переменных:" xml:space="preserve">
-    <value>Calculate variables values:</value>
-  </data>
-  <data name="Нет решений." xml:space="preserve">
-    <value>No solutions.</value>
-  </data>
-  <data name="По полученной матрице найдем ранги матрицы &lt;math&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;/math&gt; и расширенной матрицы &lt;math&gt;&lt;mi&gt;A|B&lt;/mi&gt;&lt;/math&gt; (ранг матрицы равен количеству ненулевых строк):" xml:space="preserve">
-    <value>Use row echelon matrix to find ranks of matrix &lt;math&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;/math&gt; and augmented matrix &lt;math&gt;&lt;mi&gt;A|B&lt;/mi&gt;&lt;/math&gt; (matrix rank is equal to number of non-zero rows):</value>
+  <data name="Ответ:" xml:space="preserve">
+    <value>Answer:</value>
   </data>
   <data name="Подробное решение:" xml:space="preserve">
     <value>Detailed solution:</value>
   </data>
-  <data name="Построим расширенную матрицу &lt;math&gt;&lt;mi&gt;A|B&lt;/mi&gt;&lt;/math&gt;:" xml:space="preserve">
-    <value>Build augmented matrix &lt;math&gt;&lt;mi&gt;A|B&lt;/mi&gt;&lt;/math&gt;:</value>
-  </data>
-  <data name="Ранг матрицы &lt;math&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;/math&gt; и ранг расширенной матрицы не равны, следовательно, система уравнений не имеет решений." xml:space="preserve">
-    <value>Rank of matrix &lt;math&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;/math&gt; is not equal to rank of augmented matrix, so system of equations has no solution.</value>
-  </data>
-  <data name="Ранг матрицы &lt;math&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;/math&gt; и ранг расширенной матрицы равны количеству переменных, следовательно, система уравнений имеет единственное решение." xml:space="preserve">
-    <value>Rank of matrix &lt;math&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;/math&gt; and rank of augmented matrix are equal to variables number, so system of equations has one solution.</value>
-  </data>
-  <data name="Ранг матрицы &lt;math&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;/math&gt; и ранг расширенной матрицы равны, но не равны количеству переменных, следовательно, система уравнений имеет множество решений." xml:space="preserve">
-    <value>Rank of matrix &lt;math&gt;&lt;mi&gt;A&lt;/mi&gt;&lt;/math&gt; and rank of augmented matrix are not equal to variables number, so system of equations has infinitely many solutions.</value>
-  </data>
   <data name="Решение системы уравнений" xml:space="preserve">
     <value>Solution of linear equations system</value>
   </data>
-  <data name="Решение системы уравнений (метод Гаусса)" xml:space="preserve">
-    <value>Solution of linear equations system (Gaussian elimination)</value>
+  <data name="Система уравнений имеет единственное решение." xml:space="preserve">
+    <value>System of equations has one solution.</value>
+  </data>
+  <data name="Система уравнений имеет множество решений." xml:space="preserve">
+    <value>System of equations has infinitely many solutions.</value>
+  </data>
+  <data name="Система уравнений не имеет решений." xml:space="preserve">
+    <value>System of equations has no solution.</value>
   </data>
 </root>

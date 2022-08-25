@@ -117,16 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Вычисление определителя матрицы" xml:space="preserve">
-    <value>Matrix determinant calculation</value>
+  <data name="Количество переменных:" xml:space="preserve">
+    <value>Variables number:</value>
   </data>
   <data name="метод Гаусса" xml:space="preserve">
     <value>Gaussian elimination</value>
   </data>
-  <data name="Подробное решение:" xml:space="preserve">
-    <value>Detailed solution:</value>
+  <data name="метод Крамера" xml:space="preserve">
+    <value>Cramer's rule</value>
   </data>
-  <data name="теорема Лапласа" xml:space="preserve">
-    <value>Laplace expansion</value>
+  <data name="Найти решение" xml:space="preserve">
+    <value>Solve</value>
+  </data>
+  <data name="Решение системы уравнений" xml:space="preserve">
+    <value>Solution of linear equations system</value>
   </data>
 </root>

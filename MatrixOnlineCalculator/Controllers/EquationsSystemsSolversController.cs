@@ -2,25 +2,16 @@
 using MatrixOnlineCalculator.Models.EquationsSystemsSolvers;
 using MatrixOnlineCalculator.ViewModels.EquationsSystemsSolvers;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Localization;
 
 namespace MatrixOnlineCalculator.Controllers
 {
     public class EquationsSystemsSolversController : Controller
     {
-        private IStringLocalizer<DeterminantCalculationController> localizer;
-
-        public EquationsSystemsSolversController(
-            IStringLocalizer<DeterminantCalculationController> localizer)
-        {
-            this.localizer = localizer;
-        }
-
         public IActionResult GaussianElimination()
         {
             var viewModel = new EquationsSystemsSolverFormViewModel()
             {
-                MethodName = localizer["метод Гаусса"],
+                MethodName = "метод Гаусса",
                 ActionName = "GaussianEliminationResult",
                 MinVariablesNumber = 2,
                 MaxVariablesNumber = 7,
@@ -54,7 +45,7 @@ namespace MatrixOnlineCalculator.Controllers
 
             var viewModel = new EquationsSystemsSolverResultViewModel()
             {
-                MethodName = localizer["метод Гаусса"],
+                MethodName = "метод Гаусса",
                 DetailedSolution = solution,
                 DetailedSolutionViewName = "_GaussianEliminationDetailedSolution"
             };
@@ -66,7 +57,7 @@ namespace MatrixOnlineCalculator.Controllers
         {
             var viewModel = new SquareEquationsSystemsSolverFormViewModel()
             {
-                MethodName = localizer["метод Крамера"],
+                MethodName = "метод Крамера",
                 ActionName = "CramerRuleResult",
                 MinVariablesNumber = 2,
                 MaxVariablesNumber = 7,
@@ -96,7 +87,7 @@ namespace MatrixOnlineCalculator.Controllers
 
             var viewModel = new EquationsSystemsSolverResultViewModel()
             {
-                MethodName = localizer["метод Крамера"],
+                MethodName = "метод Крамера",
                 DetailedSolution = solution,
                 DetailedSolutionViewName = "_CramerRuleDetailedSolution"
             };

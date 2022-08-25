@@ -15,7 +15,7 @@
     double epsilon = Math.Pow(0.1, precision);
 }
 
-<h1>@Localizer["Решение системы уравнений"] (@Model.MethodName)</h1>
+<h1>@Localizer["Решение системы уравнений"] (@Localizer[Model.MethodName])</h1>
 <p>
     <math>
         <math-equation-system a="Model.DetailedSolution.A"
@@ -49,7 +49,7 @@
             </p>
         }
         break;
-    case SolutionsNumber.SingleSolution:
+    case SolutionsNumber.OneSolution:
         <p>
             @Localizer["Система уравнений имеет единственное решение."]
         </p>
