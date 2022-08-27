@@ -1,12 +1,21 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using MatrixOnlineCalculator.Models.EquationsSystemsSolvers;
+using MatrixOnlineCalculator.Models.Options;
 using MatrixOnlineCalculator.ViewModels.EquationsSystemsSolvers;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace MatrixOnlineCalculator.Controllers
 {
     public class EquationsSystemsSolversController : Controller
     {
+        private readonly IOptions<MathFormatOptions> options;
+
+        public EquationsSystemsSolversController(IOptions<MathFormatOptions> options)
+        {
+            this.options = options;
+        }
+
         public IActionResult GaussianElimination()
         {
             var viewModel = new EquationsSystemsSolverFormViewModel()
@@ -41,7 +50,8 @@ namespace MatrixOnlineCalculator.Controllers
             
             var solution = new EquationsSystemsSolverByGaussianElimination(
                 aMatrix, 
-                bMatrix);
+                bMatrix,
+                options.Value.DecimalPrecision);
 
             var viewModel = new EquationsSystemsSolverResultViewModel()
             {
@@ -83,7 +93,8 @@ namespace MatrixOnlineCalculator.Controllers
             
             var solution = new EquationsSystemsSolverByCramerRule(
                 aMatrix, 
-                bMatrix);
+                bMatrix,
+                options.Value.DecimalPrecision);
 
             var viewModel = new EquationsSystemsSolverResultViewModel()
             {

@@ -11,27 +11,24 @@ namespace MatrixOnlineCalculator.HtmlHelpers
     {
         public static IHtmlContent Number(
             double value, 
-            bool? useBrackets = null, 
+            bool useBrackets, 
             int? precision = null)
         {
-            double epsilon = MathUtils.Epsilon;
-
             if (precision != null)
             {
                 value = Math.Round(value, (int)precision);
-                epsilon = Math.Pow(0.1, (int)precision);
-            }
 
-            // Avoid negative zero
-            if (MathUtils.AreEqual(value, 0, epsilon))
-            {
-                value = 0;
+                // Avoid negative zero
+                if (MathUtils.AreEqual(value, 0, (int)precision))
+                {
+                    value = 0;
+                }
             }
 
             var valueTag = new TagBuilder("mn");
             valueTag.InnerHtml.Append(value.ToString());
 
-            if ((useBrackets == true) && (value < 0))
+            if (useBrackets && (value < 0))
             {
                 var openingBracketTag = new TagBuilder("mo");
                 var closingBracketTag = new TagBuilder("mo");
@@ -58,15 +55,11 @@ namespace MatrixOnlineCalculator.HtmlHelpers
         public static IHtmlContent Polynomial(
             IEnumerable<double> coefficients,
             string variableName,
-            int? precision)
+            int precision)
         {
-            double epsilon = (precision != null) ? 
-                Math.Pow(0.1, (int)precision) :
-                MathUtils.Epsilon;
-
             var terms = coefficients
                 .Select((c, i) => new { Coefficient = c, Index = i })
-                .Where(x => !MathUtils.AreEqual(x.Coefficient, 0, epsilon));
+                .Where(x => !MathUtils.AreEqual(x.Coefficient, 0, precision));
 
             if (terms.Count() == 0)
             {
@@ -107,12 +100,8 @@ namespace MatrixOnlineCalculator.HtmlHelpers
             double coefficient, 
             int index, 
             string variableName,
-            int? precision)
+            int precision)
         {
-            double epsilon = (precision != null) ?
-                Math.Pow(0.1, (int)precision) :
-                MathUtils.Epsilon;
-
             if (string.IsNullOrWhiteSpace(variableName))
             {
                 variableName = "c";
@@ -127,7 +116,7 @@ namespace MatrixOnlineCalculator.HtmlHelpers
             }
             else
             {
-                if (!MathUtils.AreEqual(coefficient, 1, epsilon))
+                if (!MathUtils.AreEqual(coefficient, 1, precision))
                 {
                     result.AppendHtml(
                         Number(coefficient, true, precision));

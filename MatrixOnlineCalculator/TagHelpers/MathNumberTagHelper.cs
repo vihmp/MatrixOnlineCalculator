@@ -11,8 +11,10 @@ namespace MatrixOnlineCalculator.TagHelpers
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            var content = 
-                MathHtmlHelper.Number(Value, UseBrackets, Precision);
+            var content = MathHtmlHelper.Number(
+                Value, 
+                UseBrackets ?? false, 
+                Precision);
 
             output.SuppressOutput();
             output.Content.SetHtmlContent(content);

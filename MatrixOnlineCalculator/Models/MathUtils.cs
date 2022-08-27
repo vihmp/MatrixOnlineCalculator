@@ -1,14 +1,15 @@
-﻿using System;
+﻿using MatrixOnlineCalculator.Models.Options;
+using System;
 
 namespace MatrixOnlineCalculator.Models
 {
     public class MathUtils
     {
-        public const double Epsilon = 0.0000001;
-
-        public static bool AreEqual(double a, double b, double epsilon)
+        public static bool AreEqual(double a, double b, int precision)
         {
-            return Math.Abs(a - b) < epsilon;
+            double delta = Math.Pow(0.1, precision);
+
+            return Math.Abs(a - b) < delta;
         }
     }
 }

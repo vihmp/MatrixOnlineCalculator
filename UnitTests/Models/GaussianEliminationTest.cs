@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using MatrixOnlineCalculator.Models.GaussianEliminationCalculation;
 using NUnit.Framework;
+using System;
 
 namespace UnitTests.Models
 {
@@ -10,6 +11,9 @@ namespace UnitTests.Models
         [Test]
         public void GaussianEliminationSquareMatrix()
         {
+            int precision = 5;
+            double delta = Math.Pow(0.1, precision);
+
             var initial = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             { 
                 new double[] { 3, 2, 1 },
@@ -24,13 +28,13 @@ namespace UnitTests.Models
                 new double[] { 0, 0, 1.8 }
             });
 
-            var actual = new GaussianElimination(initial);
+            var actual = new GaussianElimination(initial, precision);
 
             for(int i = 0; i < initial.RowCount; i++)
             {
                 for (int j = 0; j < initial.ColumnCount; j++)
                 {
-                    Assert.AreEqual(expected[i, j], actual.Result[i, j], 0.0001);
+                    Assert.AreEqual(expected[i, j], actual.Result[i, j], delta);
                 }
             }
         }
@@ -38,6 +42,9 @@ namespace UnitTests.Models
         [Test]
         public void GaussianEliminationSingularMatrix()
         {
+            int precision = 5;
+            double delta = Math.Pow(0.1, precision);
+
             var initial = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
                 new double[] { 3, 2.625, 1, 2 },
@@ -50,17 +57,17 @@ namespace UnitTests.Models
             {
                 new double[] { 8, 7, 9, 1 },
                 new double[] { 0, 0, -2.375, 1.625 },
-                new double[] { 0, 0, 0, 3.6316 },
+                new double[] { 0, 0, 0, 3.63158 },
                 new double[] { 0, 0, 0, 0 }
             });
 
-            var actual = new GaussianElimination(initial);
+            var actual = new GaussianElimination(initial, precision);
 
             for (int i = 0; i < initial.RowCount; i++)
             {
                 for (int j = 0; j < initial.ColumnCount; j++)
                 {
-                    Assert.AreEqual(expected[i, j], actual.Result[i, j], 0.0001);
+                    Assert.AreEqual(expected[i, j], actual.Result[i, j], delta);
                 }
             }
         }
@@ -68,6 +75,9 @@ namespace UnitTests.Models
         [Test]
         public void GaussianEliminationColumnCountGreater()
         {
+            int precision = 5;
+            double delta = Math.Pow(0.1, precision);
+
             var initial = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
                 new double[] { 1, 4, 9, 11 },
@@ -82,13 +92,13 @@ namespace UnitTests.Models
                 new double[] { 0, 0, -1, -0.5 }
             });
 
-            var actual = new GaussianElimination(initial);
+            var actual = new GaussianElimination(initial, precision);
 
             for (int i = 0; i < initial.RowCount; i++)
             {
                 for (int j = 0; j < initial.ColumnCount; j++)
                 {
-                    Assert.AreEqual(expected[i, j], actual.Result[i, j], 0.0001);
+                    Assert.AreEqual(expected[i, j], actual.Result[i, j], delta);
                 }
             }
         }
@@ -96,6 +106,9 @@ namespace UnitTests.Models
         [Test]
         public void GaussianEliminationRowCountGreater()
         {
+            int precision = 5;
+            double delta = Math.Pow(0.1, precision);
+
             var initial = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
                 new double[] { 1, 5, 9 },
@@ -112,13 +125,13 @@ namespace UnitTests.Models
                 new double[] { 0, 0, 0 }
             });
 
-            var actual = new GaussianElimination(initial);
+            var actual = new GaussianElimination(initial, precision);
 
             for (int i = 0; i < initial.RowCount; i++)
             {
                 for (int j = 0; j < initial.ColumnCount; j++)
                 {
-                    Assert.AreEqual(expected[i, j], actual.Result[i, j], 0.0001);
+                    Assert.AreEqual(expected[i, j], actual.Result[i, j], delta);
                 }
             }
         }
@@ -126,6 +139,9 @@ namespace UnitTests.Models
         [Test]
         public void GaussianEliminationNoOperations()
         {
+            int precision = 5;
+            double delta = Math.Pow(0.1, precision);
+
             var initial = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
                 new double[] { 1, 0, 0 },
@@ -140,13 +156,13 @@ namespace UnitTests.Models
                 new double[] { 0, 0, 1 }
             });
 
-            var actual = new GaussianElimination(initial);
+            var actual = new GaussianElimination(initial, precision);
 
             for (int i = 0; i < initial.RowCount; i++)
             {
                 for (int j = 0; j < initial.ColumnCount; j++)
                 {
-                    Assert.AreEqual(expected[i, j], actual.Result[i, j], 0.0001);
+                    Assert.AreEqual(expected[i, j], actual.Result[i, j], delta);
                 }
             }
         }

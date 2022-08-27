@@ -17,9 +17,9 @@ namespace MatrixOnlineCalculator.Models.DeterminantCalculation
             }
         }
 
-        public DeterminantByGaussianElimination(Matrix<double> matrix)
+        public DeterminantByGaussianElimination(Matrix<double> matrix, int precision)
         {
-            GaussianElimination = new GaussianElimination(matrix);
+            GaussianElimination = new GaussianElimination(matrix, precision);
 
             int rowSwitchingNumber = GaussianElimination.ElementaryRowOperations
                 .OfType<RowSwitching>()

@@ -13,13 +13,17 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
         public SolutionsNumber SolutionsNumber { get; }
         public List<IDeterminantCalculation> Determinants { get; }
 
-        public EquationsSystemsSolverByCramerRule(Matrix<double> a, Matrix<double> b)
+        public EquationsSystemsSolverByCramerRule(
+            Matrix<double> a,
+            Matrix<double> b,
+            int precision)
         {
             A = a;
             B = b;
             Determinants = new List<IDeterminantCalculation>();
             
-            Determinants.Add(new DeterminantByGaussianElimination(a));
+            Determinants.Add(
+                new DeterminantByGaussianElimination(a, precision));
 
             for (int j = 0; j < a.ColumnCount; j++)
             {
@@ -30,10 +34,11 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
                     buffer[i, j] = b[i, 0];
                 }
 
-                Determinants.Add(new DeterminantByGaussianElimination(buffer));
+                Determinants.Add(
+                    new DeterminantByGaussianElimination(buffer, precision));
             }
 
-            if (!MathUtils.AreEqual(Determinants[0].Determinant, 0, MathUtils.Epsilon))
+            if (!MathUtils.AreEqual(Determinants[0].Determinant, 0, precision))
             {
                 int variablesNumber = b.RowCount;
                 X = Matrix<double>.Build.Dense(variablesNumber, 1);

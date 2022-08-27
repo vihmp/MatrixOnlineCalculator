@@ -1,8 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
-using MatrixOnlineCalculator.Models;
+using MatrixOnlineCalculator.HtmlHelpers;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using System;
-using System.Text;
 
 namespace MatrixOnlineCalculator.TagHelpers
 {
@@ -18,27 +17,18 @@ namespace MatrixOnlineCalculator.TagHelpers
 
             for (int i = 0; i < Data.RowCount; i++)
             {
-                var row = new StringBuilder();
+                var rowTag = new TagBuilder("mtr");
 
                 for (int j = 0; j < Data.ColumnCount; j++)
                 {
-                    double value = Data[i, j];
+                    var cellTag = new TagBuilder("mtd");
 
-                    if (Precision != null)
-                    {
-                        value = Math.Round(Data[i, j], (int)Precision);
-                    }
-
-                    // Avoid negative zero
-                    if (MathUtils.AreEqual(value, 0, MathUtils.Epsilon))
-                    {
-                        value = 0;
-                    }
-
-                    row.Append($"<mtd><mn>{value}</mn></mtd>");
+                    cellTag.InnerHtml.AppendHtml(
+                        MathHtmlHelper.Number(Data[i, j], false, Precision));
+                    rowTag.InnerHtml.AppendHtml(cellTag);
                 }
 
-                output.Content.AppendHtml($"<mtr>{row}</mtr>");
+                output.Content.AppendHtml(rowTag);
             }
         }
     }

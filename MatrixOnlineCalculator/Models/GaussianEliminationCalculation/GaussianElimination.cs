@@ -11,7 +11,7 @@ namespace MatrixOnlineCalculator.Models.GaussianEliminationCalculation
         public Matrix<double> Initial { get; }
         public Matrix<double> Result { get; }
 
-        public GaussianElimination(Matrix<double> matrix)
+        public GaussianElimination(Matrix<double> matrix, int precision)
         {
             ElementaryRowOperations = new List<ElementaryRowOperation>();
             Initial = matrix;
@@ -35,7 +35,7 @@ namespace MatrixOnlineCalculator.Models.GaussianEliminationCalculation
                     }
                 }
 
-                if (MathUtils.AreEqual(maxAbs, 0, MathUtils.Epsilon))
+                if (MathUtils.AreEqual(maxAbs, 0, precision))
                 {
                     j++;
                     continue;

@@ -8,13 +8,8 @@
 
 @model EquationsSystemsSolverByGaussianElimination
 
-@inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IOptions<MathFormatOptions> MathFormatOptions
 @inject IViewLocalizer Localizer
-
-@{
-    int precision = mathFormatOptions.Value.DecimalPrecision;
-    double epsilon = Math.Pow(0.1, precision);
-}
 
 <ol>
     <li>
@@ -26,7 +21,7 @@
                 <mrow>
                     <mo>(</mo>
                     <math-matrix data="Model.GaussianElimination.Initial"
-                                 precision="precision" />
+                                 precision="MathFormatOptions.Value.DecimalPrecision" />
                     <mo>)</mo>
                 </mrow>
             </math>
@@ -72,7 +67,7 @@
             </li>
             <li>
                 <p>@Localizer["Вычислим значения переменных:"]</p>
-                @BasicVariablesCalculation(Model, precision)
+                @BasicVariablesCalculation(Model, MathFormatOptions.Value.DecimalPrecision)
             </li>
             break;
         case SolutionsNumber.InfinitelyManySolutions:
@@ -91,14 +86,14 @@
                             <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
                             <mo>=</mo>
                             <math-polynomial coefficients="Model.X.Row(i)"
-                                             precision="precision" />
+                                             precision="MathFormatOptions.Value.DecimalPrecision" />
                         </math>
                     </p>
                 }
             </li>
             <li>
                 <p>@Localizer["Выразим базисные переменные через свободные:"]</p>
-                @BasicVariablesCalculation(Model, precision)
+                @BasicVariablesCalculation(Model, MathFormatOptions.Value.DecimalPrecision)
             </li>
             break;
     }
@@ -115,8 +110,6 @@
         EquationsSystemsSolverByGaussianElimination solver,
         int precision)
     {
-        double epsilon = Math.Pow(0.1, precision);
-
         var result = new HtmlContentBuilder();
 
         foreach (var calculation in solver.BasicVariablesCalculation)
@@ -129,13 +122,13 @@
             mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
 
             var nonZeroCoeffsCount = calculation.PolynomCoefficients
-                .Where(x => !MathUtils.AreEqual(x, 0, epsilon))
+                .Where(x => !MathUtils.AreEqual(x, 0, precision))
                 .Count();
 
-            if (!MathUtils.AreEqual(calculation.Divider, 1, epsilon) ||
+            if (!MathUtils.AreEqual(calculation.Divider, 1, precision) ||
                 (nonZeroCoeffsCount > 1))
             {
-                if (!MathUtils.AreEqual(calculation.Divider, 1, epsilon))
+                if (!MathUtils.AreEqual(calculation.Divider, 1, precision))
                 {
                     var mfracTag = new TagBuilder("mfrac");
 
@@ -151,7 +144,7 @@
                 }
 
                 bool useBrackets =
-                    !MathUtils.AreEqual(calculation.Divider, 1, epsilon) &&
+                    !MathUtils.AreEqual(calculation.Divider, 1, precision) &&
                     (nonZeroCoeffsCount > 1);
 
                 if (useBrackets)

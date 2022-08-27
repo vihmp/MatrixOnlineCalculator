@@ -6,13 +6,8 @@
 
 @model EquationsSystemsSolverByCramerRule
 
-@inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IOptions<MathFormatOptions> MathFormatOptions
 @inject IViewLocalizer Localizer
-
-@{
-    int precision = mathFormatOptions.Value.DecimalPrecision;
-    double epsilon = Math.Pow(0.1, precision);
-}
 
 <ol>
     @for (int i = 0; i < Model.Determinants.Count; i++)
@@ -34,7 +29,7 @@
                     </mrow>
                     <mo>=</mo>
                     <math-number value="determinant.Determinant"
-                                 precision="precision" />
+                                 precision="MathFormatOptions.Value.DecimalPrecision" />
                 </math>
             </p>
         </li>
@@ -44,7 +39,7 @@
         {
             case SolutionsNumber.NoSolution:
                 int nonZeroDeltaIndex = Model.Determinants
-                    .FindIndex(x => !MathUtils.AreEqual(x.Determinant, 0, MathUtils.Epsilon));
+                    .FindIndex(x => !MathUtils.AreEqual(x.Determinant, 0, MathFormatOptions.Value.DecimalPrecision));
 
                 <p>
                     <math>
@@ -101,13 +96,13 @@
                             <mo>=</mo>
                             <mfrac>
                                 <math-number value="Model.Determinants[i].Determinant"
-                                             precision="precision" />
+                                             precision="MathFormatOptions.Value.DecimalPrecision" />
                                 <math-number value="Model.Determinants[0].Determinant"
-                                             precision="precision" />
+                                             precision="MathFormatOptions.Value.DecimalPrecision" />
                             </mfrac>
                             <mo>=</mo>
                             <math-number value="Model.X[i - 1, 0]"
-                                         precision="precision" />
+                                         precision="MathFormatOptions.Value.DecimalPrecision" />
                         </math>
                     </p>
                 }

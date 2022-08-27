@@ -1,6 +1,7 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
 using MatrixOnlineCalculator.Models.DeterminantCalculation;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
 namespace UnitTests.Models
@@ -11,6 +12,9 @@ namespace UnitTests.Models
         [Test]
         public void LaplaceExpansion()
         {
+            int precision = 5;
+            double delta = Math.Pow(0.1, precision);
+
             var matrix = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
                 new double[] { 1, 2, 3 },
@@ -37,9 +41,9 @@ namespace UnitTests.Models
                     }))
             };
 
-            var laplaceExpansion = new LaplaceExpansion(matrix);
+            var laplaceExpansion = new LaplaceExpansion(matrix, precision);
 
-            Assert.AreEqual(0, laplaceExpansion.Determinant, 0.0001);
+            Assert.AreEqual(0, laplaceExpansion.Determinant, delta);
             Assert.AreEqual(3, laplaceExpansion.Minors.Count);
 
             for(int k = 0; k < 3; k++)
@@ -57,7 +61,7 @@ namespace UnitTests.Models
                         Assert.AreEqual(
                             expectedMinors[k].Minor[i, j], 
                             laplaceExpansion.Minors[k].Minor.Matrix[i, j],
-                            0.0001);
+                            delta);
                     }
                 }
             }
@@ -66,14 +70,17 @@ namespace UnitTests.Models
         [Test]
         public void LaplaceExpansionOneElementMatrix()
         {
+            int precision = 5;
+            double delta = Math.Pow(0.1, precision);
+
             var matrix = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
                 new double[] { 1 }
             });
 
-            var laplaceExpansion = new LaplaceExpansion(matrix);
+            var laplaceExpansion = new LaplaceExpansion(matrix, precision);
 
-            Assert.AreEqual(1, laplaceExpansion.Determinant, 0.0001);
+            Assert.AreEqual(1, laplaceExpansion.Determinant, delta);
             Assert.AreEqual(0, laplaceExpansion.Minors.Count);
         }
     }

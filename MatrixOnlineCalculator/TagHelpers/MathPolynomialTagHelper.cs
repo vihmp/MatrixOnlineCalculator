@@ -8,7 +8,7 @@ namespace MatrixOnlineCalculator.TagHelpers
     {
         public IEnumerable<double> Coefficients { get; set; }
         public string VariableName { get; set; }
-        public int? Precision { get; set; }
+        public int Precision { get; set; }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {

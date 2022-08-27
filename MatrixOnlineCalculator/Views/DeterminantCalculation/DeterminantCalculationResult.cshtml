@@ -10,7 +10,6 @@
 
 @{
     ViewData["Title"] = Localizer["Вычисление определителя матрицы"];
-    int precision = MathFormatOptions.Value.DecimalPrecision;
 }
 
 <h1>@Localizer["Вычисление определителя матрицы"] (@Localizer[Model.MethodName])</h1>
@@ -23,7 +22,7 @@
         </mrow>
         <mo>=</mo>
         <math-number value="Model.DetailedSolution.Determinant"
-                     precision="precision" />
+                     precision="MathFormatOptions.Value.DecimalPrecision" />
     </math>
 </p>
 

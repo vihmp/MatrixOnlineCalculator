@@ -6,13 +6,11 @@
 
 @model EquationsSystemsSolverResultViewModel
 
-@inject IOptions<MathFormatOptions> mathFormatOptions
+@inject IOptions<MathFormatOptions> MathFormatOptions
 @inject IViewLocalizer Localizer
 
 @{
     ViewData["Title"] = Localizer["Решение системы уравнений"];
-    int precision = mathFormatOptions.Value.DecimalPrecision;
-    double epsilon = Math.Pow(0.1, precision);
 }
 
 <h1>@Localizer["Решение системы уравнений"] (@Localizer[Model.MethodName])</h1>
@@ -43,7 +41,7 @@
                         <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
                         <mo>=</mo>
                         <math-polynomial coefficients="Model.DetailedSolution.X.Row(i)"
-                                         precision="precision" />
+                                         precision="MathFormatOptions.Value.DecimalPrecision" />
                     </math>@(i < Model.DetailedSolution.X.RowCount - 1 ? "," : ".")
                 }
             </p>
@@ -60,7 +58,7 @@
                     <msub><mi>x</mi><mn>@(i + 1)</mn></msub>
                     <mo>=</mo>
                     <math-number value="Model.DetailedSolution.X[i,0]"
-                                 precision="precision" />
+                                 precision="MathFormatOptions.Value.DecimalPrecision" />
                 </math>@(i < Model.DetailedSolution.X.RowCount - 1 ? "," : ".")
             }
         </p>

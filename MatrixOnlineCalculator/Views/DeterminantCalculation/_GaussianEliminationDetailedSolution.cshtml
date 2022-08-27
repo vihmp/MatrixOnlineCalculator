@@ -12,7 +12,6 @@
 <ol>
     @await Html.PartialAsync("_GaussianElimination", Model.GaussianElimination)
     @{
-        int precision = MathFormatOptions.Value.DecimalPrecision;
         int rowSwitchingNumber = Model.GaussianElimination.ElementaryRowOperations
             .OfType<RowSwitching>()
             .Count();
@@ -48,7 +47,7 @@
                         }
                         <mo>|</mo>
                         <math-matrix data="Model.GaussianElimination.Result"
-                                     precision="precision" />
+                                     precision="MathFormatOptions.Value.DecimalPrecision" />
                         <mo>|</mo>
                     </mrow>
                     <mo>=</mo>
@@ -65,12 +64,12 @@
                             <mo>&sdot;</mo>
                         }
                         <math-number value="Model.GaussianElimination.Result[i, i]"
-                                     precision="precision"
+                                     precision="MathFormatOptions.Value.DecimalPrecision"
                                      use-brackets="true" />
                     }
                     <mo>=</mo>
                     <math-number value="Model.Determinant" 
-                                 precision="precision" />
+                                 precision="MathFormatOptions.Value.DecimalPrecision" />
                 </math>
             </p>
         </li>

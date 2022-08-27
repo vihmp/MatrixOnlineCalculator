@@ -14,6 +14,8 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
             public double[] PolynomCoefficients { get; set; }
         }
 
+        private readonly int precision;
+
         public Matrix<double> A { get; }
         public Matrix<double> B { get; }
         public Matrix<double> X { get; private set; }
@@ -22,13 +24,18 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
         public List<BasicVariableCalculation> BasicVariablesCalculation { get; }
         public List<int> FreeVariablesIndices { get; }
 
-        public EquationsSystemsSolverByGaussianElimination(Matrix<double> a, Matrix<double> b)
+        public EquationsSystemsSolverByGaussianElimination(
+            Matrix<double> a, 
+            Matrix<double> b,
+            int precision)
         {
             var augmentedMatrix = a.Append(b);
 
             A = a;
             B = b;
-            GaussianElimination = new GaussianElimination(augmentedMatrix);
+            this.precision = precision;
+            GaussianElimination = 
+                new GaussianElimination(augmentedMatrix, precision);
             FreeVariablesIndices = new List<int>();
             BasicVariablesCalculation = new List<BasicVariableCalculation>();
 
@@ -66,7 +73,7 @@ namespace MatrixOnlineCalculator.Models.EquationsSystemsSolvers
             for(int col = 0; col < variablesNumber; col++)
             {
                 if ((row >= GaussianElimination.Result.RowCount) ||
-                    MathUtils.AreEqual(GaussianElimination.Result[row, col], 0, MathUtils.Epsilon))
+                    MathUtils.AreEqual(GaussianElimination.Result[row, col], 0, precision))
                 {
                     FreeVariablesIndices.Add(col);
                 }

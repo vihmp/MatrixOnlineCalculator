@@ -8,11 +8,6 @@
 
 @inject IOptions<MathFormatOptions> MathFormatOptions
 
-@{
-    int precision = MathFormatOptions.Value.DecimalPrecision;
-    double epsilon = Math.Pow(0.1, precision);
-}
-
 @foreach (var operation in Model.ElementaryRowOperations)
 {
     if (!operation.Initial.Equals(operation.Result))
@@ -42,7 +37,7 @@
 
                             foreach (var addition in ras.Additions)
                             {
-                                if (!MathUtils.AreEqual(0, addition.Multiplier, epsilon))
+                                if (!MathUtils.AreEqual(0, addition.Multiplier, MathFormatOptions.Value.DecimalPrecision))
                                 {
                                     if (!isFirstAddition)
                                     {
@@ -61,19 +56,19 @@
                                         @if (addition.Multiplier > 0)
                                         {
                                             <mo>+</mo>
-                                            if (!MathUtils.AreEqual(addition.Multiplier, 1, epsilon))
+                                            if (!MathUtils.AreEqual(addition.Multiplier, 1, MathFormatOptions.Value.DecimalPrecision))
                                             {
                                                 <math-number value="addition.Multiplier"
-                                                             precision="precision" />
+                                                             precision="MathFormatOptions.Value.DecimalPrecision" />
                                             }
                                         }
                                         else
                                         {
                                             <mo>-</mo>
-                                            if (!MathUtils.AreEqual(addition.Multiplier, -1, epsilon))
+                                            if (!MathUtils.AreEqual(addition.Multiplier, -1, MathFormatOptions.Value.DecimalPrecision))
                                             {
                                                 <math-number value="Math.Abs(addition.Multiplier)"
-                                                             precision="precision" />
+                                                             precision="MathFormatOptions.Value.DecimalPrecision" />
                                             }
                                         }
                                         <msub>
@@ -97,14 +92,14 @@
                     <mrow>
                         <mo>(</mo>
                         <math-matrix data="operation.Initial" 
-                                     precision="precision" />
+                                     precision="MathFormatOptions.Value.DecimalPrecision" />
                         <mo>)</mo>
                     </mrow>
                     <mo>&rarr;</mo>
                     <mrow>
                         <mo>(</mo>
                         <math-matrix data="operation.Result" 
-                                     precision="precision" />
+                                     precision="MathFormatOptions.Value.DecimalPrecision" />
                         <mo>)</mo>
                     </mrow>
                 </math>

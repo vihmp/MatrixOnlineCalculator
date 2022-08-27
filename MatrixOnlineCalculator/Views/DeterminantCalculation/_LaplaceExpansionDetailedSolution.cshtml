@@ -10,7 +10,6 @@
 
 <ol>
     @{
-        int precision = MathFormatOptions.Value.DecimalPrecision;
         int index = 0;
         var steps = new Stack<(int ParentIndex, int Row, int Column, LaplaceExpansion Expansion)>();
         steps.Push((0, 0, 0, Model));
@@ -121,11 +120,11 @@
                                 <mo>&sdot;</mo>
                                 <math-number value="step.Expansion.Minors[j].Minor.Determinant"
                                              use-brackets="true"
-                                             precision="precision" />
+                                             precision="MathFormatOptions.Value.DecimalPrecision" />
                             }
                             <mo>=</mo>
                             <math-number value="step.Expansion.Determinant" 
-                                         precision="precision" />
+                                         precision="MathFormatOptions.Value.DecimalPrecision" />
                         }
                     </math>
                 </p>
@@ -171,11 +170,11 @@
                                 <mo>&sdot;</mo>
                                 <math-number value="step.Expansion.Minors[j].Minor.Determinant"
                                              use-brackets="true"
-                                             precision="precision" />
+                                             precision="MathFormatOptions.Value.DecimalPrecision" />
                             }
                             <mo>=</mo>
                             <math-number value="step.Expansion.Determinant"
-                                         precision="precision" />
+                                         precision="MathFormatOptions.Value.DecimalPrecision" />
                         </math>
                     </p>
 
