@@ -9,6 +9,21 @@ namespace UnitTests.HtmlHelpers
     [TestFixture]
     public class MathHtmlHelperTest
     {
+        private CultureInfo currentCultureRestoreValue;
+
+        [OneTimeSetUp]
+        public void Init()
+        {
+            currentCultureRestoreValue = CultureInfo.CurrentCulture;
+            CultureInfo.CurrentCulture = new CultureInfo("ru");
+        }
+
+        [OneTimeTearDown]
+        public void Cleanup()
+        {
+            CultureInfo.CurrentCulture = currentCultureRestoreValue;
+        }
+
         [TestCase(1.23456789, false, null, ExpectedResult = "<mn>1,23456789</mn>")]
         [TestCase(1.23456789, false, 3, ExpectedResult = "<mn>1,235</mn>")]
         [TestCase(1.23456789, false, 2, ExpectedResult = "<mn>1,23</mn>")]
@@ -19,8 +34,6 @@ namespace UnitTests.HtmlHelpers
         [TestCase(-0.000001, true, 2, ExpectedResult = "<mn>0</mn>")]
         public string MathHtmlHelperNumber(double value, bool useBrackets, int? precision)
         {
-            CultureInfo.CurrentCulture = new CultureInfo("ru");
-
             return MathHtmlHelper.Number(value, useBrackets, precision)
                 .AsString();
         }
@@ -52,8 +65,6 @@ namespace UnitTests.HtmlHelpers
             string variableName, 
             int precision)
         {
-            CultureInfo.CurrentCulture = new CultureInfo("ru");
-
             return MathHtmlHelper.Polynomial(coefficients, variableName, precision)
                 .AsString();
         }
