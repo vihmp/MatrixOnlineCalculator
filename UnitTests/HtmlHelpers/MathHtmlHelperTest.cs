@@ -1,29 +1,14 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using System.Globalization;
 using UnitTests.TestUtils;
 using MatrixOnlineCalculator.HtmlHelpers;
 
 namespace UnitTests.HtmlHelpers
 {
     [TestFixture]
+    [SetCulture("ru")]
     public class MathHtmlHelperTest
     {
-        private CultureInfo currentCultureRestoreValue;
-
-        [OneTimeSetUp]
-        public void Init()
-        {
-            currentCultureRestoreValue = CultureInfo.CurrentCulture;
-            CultureInfo.CurrentCulture = new CultureInfo("ru");
-        }
-
-        [OneTimeTearDown]
-        public void Cleanup()
-        {
-            CultureInfo.CurrentCulture = currentCultureRestoreValue;
-        }
-
         [TestCase(1.23456789, false, null, ExpectedResult = "<mn>1,23456789</mn>")]
         [TestCase(1.23456789, false, 3, ExpectedResult = "<mn>1,235</mn>")]
         [TestCase(1.23456789, false, 2, ExpectedResult = "<mn>1,23</mn>")]
