@@ -4,6 +4,7 @@ using MatrixOnlineCalculator.Models.EquationsSystemsSolvers;
 using System.Linq;
 using MatrixOnlineCalculator.Models;
 using System;
+using UnitTests.TestUtils;
 
 namespace UnitTests.Models
 {
@@ -14,7 +15,6 @@ namespace UnitTests.Models
         public void EquationsSystemsSolverByCramerRuleOneSolution()
         {
             int precision = 5;
-            double delta = Math.Pow(0.1, precision);
 
             var a = Matrix<double>.Build.DenseOfRowArrays(new double[][]
             {
@@ -43,11 +43,7 @@ namespace UnitTests.Models
             var actual = 
                 new EquationsSystemsSolverByCramerRule(a, b, precision);
 
-            for (int i = 0; i < expected.RowCount; i++)
-            {
-                Assert.AreEqual(expected[i, 0], actual.X[i, 0], delta);
-            }
-
+            MatrixAssert.AreEqual(expected, actual.X, precision);
             Assert.AreEqual(SolutionsNumber.OneSolution, actual.SolutionsNumber);
         }
 
@@ -74,12 +70,13 @@ namespace UnitTests.Models
             var actual = 
                 new EquationsSystemsSolverByCramerRule(a, b, precision);
 
-            Assert.AreEqual(0, actual.X.RowCount);
-            Assert.AreEqual(0, actual.Determinants[0].Determinant, delta);
+            var expected = Matrix<double>.Build.Dense(0, 0);
+
+            MatrixAssert.AreEqual(expected, actual.X, precision);
+            Assert.AreEqual(SolutionsNumber.NoSolution, actual.SolutionsNumber);
             Assert.IsTrue(
                 actual.Determinants.Any(
                     x => !MathUtils.AreEqual(x.Determinant, 0, precision)));
-            Assert.AreEqual(SolutionsNumber.NoSolution, actual.SolutionsNumber);
         }
 
         [Test]
@@ -105,12 +102,13 @@ namespace UnitTests.Models
             var actual = 
                 new EquationsSystemsSolverByCramerRule(a, b, precision);
 
-            Assert.AreEqual(0, actual.X.RowCount);
-            Assert.AreEqual(0, actual.Determinants[0].Determinant, delta);
+            var expected = Matrix<double>.Build.Dense(0, 0);
+
+            MatrixAssert.AreEqual(expected, actual.X, precision);
+            Assert.AreEqual(SolutionsNumber.InfinitelyManySolutions, actual.SolutionsNumber);
             Assert.IsTrue(
                 actual.Determinants.All(
                     x => MathUtils.AreEqual(x.Determinant, 0, precision)));
-            Assert.AreEqual(SolutionsNumber.InfinitelyManySolutions, actual.SolutionsNumber);
         }
     }
 }

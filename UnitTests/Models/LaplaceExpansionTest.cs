@@ -3,6 +3,7 @@ using MatrixOnlineCalculator.Models.DeterminantCalculation;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using UnitTests.TestUtils;
 
 namespace UnitTests.Models
 {
@@ -50,20 +51,10 @@ namespace UnitTests.Models
             {
                 Assert.AreEqual(expectedMinors[k].Row, laplaceExpansion.Minors[k].Row);
                 Assert.AreEqual(expectedMinors[k].Column, laplaceExpansion.Minors[k].Column);
-                
-                Assert.AreEqual(2, laplaceExpansion.Minors[k].Minor.Matrix.RowCount);
-                Assert.AreEqual(2, laplaceExpansion.Minors[k].Minor.Matrix.ColumnCount);
-
-                for (int i = 0; i < 2; i++)
-                {
-                    for(int j = 0; j < 2; j++)
-                    {
-                        Assert.AreEqual(
-                            expectedMinors[k].Minor[i, j], 
-                            laplaceExpansion.Minors[k].Minor.Matrix[i, j],
-                            delta);
-                    }
-                }
+                MatrixAssert.AreEqual(
+                    expectedMinors[k].Minor, 
+                    laplaceExpansion.Minors[k].Minor.Matrix, 
+                    precision);
             }
         }
 
