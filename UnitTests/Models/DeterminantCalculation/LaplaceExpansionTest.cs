@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnitTests.TestUtils;
 
-namespace UnitTests.Models
+namespace UnitTests.Models.DeterminantCalculation
 {
     [TestFixture]
     public class LaplaceExpansionTest

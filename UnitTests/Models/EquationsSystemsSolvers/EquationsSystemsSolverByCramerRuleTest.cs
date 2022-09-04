@@ -6,7 +6,7 @@ using MatrixOnlineCalculator.Models;
 using System;
 using UnitTests.TestUtils;
 
-namespace UnitTests.Models
+namespace UnitTests.Models.EquationsSystemsSolvers
 {
     [TestFixture]
     class EquationsSystemsSolverByCramerRuleTest

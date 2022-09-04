@@ -3,7 +3,7 @@ using NUnit.Framework;
 using MatrixOnlineCalculator.Models.EquationsSystemsSolvers;
 using UnitTests.TestUtils;
 
-namespace UnitTests.Models
+namespace UnitTests.Models.EquationsSystemsSolvers
 {
     [TestFixture]
     class EquationsSystemsSolverByGaussianEliminationTest

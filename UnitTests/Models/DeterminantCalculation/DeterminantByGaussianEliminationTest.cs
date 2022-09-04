@@ -3,7 +3,7 @@ using MatrixOnlineCalculator.Models.DeterminantCalculation;
 using NUnit.Framework;
 using System;
 
-namespace UnitTests.Models
+namespace UnitTests.Models.DeterminantCalculation
 {
     [TestFixture]
     public class DeterminantByGaussianEliminationTest

@@ -3,7 +3,7 @@ using MatrixOnlineCalculator.Models.GaussianEliminationCalculation;
 using NUnit.Framework;
 using UnitTests.TestUtils;
 
-namespace UnitTests.Models
+namespace UnitTests.Models.GaussianEliminationCalculation
 {
     [TestFixture]
     public class GaussianEliminationTest
