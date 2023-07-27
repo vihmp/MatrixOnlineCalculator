@@ -86,8 +86,6 @@ namespace MatrixCalculators.EquationsSystemsSolvers
                 }
             }
 
-            basicVariables.Reverse();
-
             return (freeVariables, basicVariables);
         }
 
@@ -106,30 +104,30 @@ namespace MatrixCalculators.EquationsSystemsSolvers
             // Set free variables values
             for (int i = 0; i < freeVariables.Count; i++)
             {
-                var variableIndex = freeVariables[i];
-                x[variableIndex, i + 1] = 1;
+                var variable = freeVariables[i];
+                x[variable, i + 1] = 1;
             }
 
             // Calculate basic variables values
-            for (int i = 0; i < basicVariables.Count; i++)
+            for (int i = basicVariables.Count - 1; i >= 0; i--)
             {
-                int basicVariable = basicVariables[i];
-                x[basicVariable, 0] = rowEchelonMatrix[basicVariable, variablesNumber];
+                int variable = basicVariables[i];
+                x[variable, 0] = rowEchelonMatrix[i, variablesNumber];
 
-                for (int j = basicVariable + 1; j < variablesNumber; j++)
+                for (int j = variable + 1; j < variablesNumber; j++)
                 {
                     if (!MathUtils.AreEqual(rowEchelonMatrix[i, j], 0, precision))
                     {
                         for (int k = 0; k < x.ColumnCount; k++)
                         {
-                            x[basicVariable, k] += rowEchelonMatrix[i, j] * x[j, k];
+                            x[variable, k] -= rowEchelonMatrix[i, j] * x[j, k];
                         }
                     }
                 }
 
                 for (int k = 0; k < x.ColumnCount; k++)
                 {
-                    x[basicVariable, k] /= rowEchelonMatrix[i, basicVariable];
+                    x[variable, k] /= rowEchelonMatrix[i, variable];
                 }
             }
 

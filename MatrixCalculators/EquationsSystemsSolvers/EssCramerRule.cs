@@ -35,7 +35,7 @@ namespace MatrixCalculators.EquationsSystemsSolvers
                 x = Matrix<double>.Build.Dense(0, 0);
 
                 if (solutionSteps.Skip(1)
-                    .Any(x => MathUtils.AreEqual(x.Determinant, 0, precision)))
+                    .Any(x => !MathUtils.AreEqual(x.Determinant, 0, precision)))
                 {
                     solutionsNumber = SolutionsNumber.NoSolution;
                 }
