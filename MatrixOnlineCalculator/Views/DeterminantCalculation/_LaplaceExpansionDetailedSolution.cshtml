@@ -1,9 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
-@using MatrixOnlineCalculator.Models.DeterminantCalculation
+@using MatrixCalculators.DeterminantCalculators
+@using MatrixCalculators.Utils
 @using MatrixOnlineCalculator.Models.Options
 
-@model LaplaceExpansion
+@model DcLaplaceExpansionSolution
 
 @inject IOptions<MathFormatOptions> MathFormatOptions
 @inject IViewLocalizer Localizer
@@ -12,7 +13,7 @@
     @{
         int index = 0;
         var steps = new Stack<(int ParentIndex, int Row, int Column, LaplaceExpansion Expansion)>();
-        steps.Push((0, 0, 0, Model));
+        steps.Push((0, 0, 0, Model.SolutionSteps));
 
         while (steps.Count > 0)
         {
@@ -89,7 +90,7 @@
                                     </mrow>
                                 </msup>
                                 <mo>&sdot;</mo>
-                                <math-number value="step.Expansion.Matrix[0, j]" 
+                                <math-number value="step.Expansion.Matrix[0, j]"
                                              use-brackets="true" />
                                 <mo>&sdot;</mo>
                                 <msubsup>
@@ -115,7 +116,7 @@
                                     <mo>@(j % 2 == 0 ? "+" : "-")</mo>
                                 }
 
-                                <math-number value="step.Expansion.Matrix[0, j]" 
+                                <math-number value="step.Expansion.Matrix[0, j]"
                                              use-brackets="true" />
                                 <mo>&sdot;</mo>
                                 <math-number value="step.Expansion.Minors[j].Minor.Determinant"
@@ -123,7 +124,7 @@
                                              precision="MathFormatOptions.Value.DecimalPrecision" />
                             }
                             <mo>=</mo>
-                            <math-number value="step.Expansion.Determinant" 
+                            <math-number value="step.Expansion.Determinant"
                                          precision="MathFormatOptions.Value.DecimalPrecision" />
                         }
                     </math>
@@ -142,7 +143,7 @@
                                     <mo>@(j % 2 == 0 ? "+" : "-")</mo>
                                 }
 
-                                <math-number value="step.Expansion.Matrix[0, j]" 
+                                <math-number value="step.Expansion.Matrix[0, j]"
                                              use-brackets="true" />
                                 <mo>&sdot;</mo>
                                 <mrow>
@@ -165,7 +166,7 @@
                                     <mo>@(j % 2 == 0 ? "+" : "-")</mo>
                                 }
 
-                                <math-number value="step.Expansion.Matrix[0, j]" 
+                                <math-number value="step.Expansion.Matrix[0, j]"
                                              use-brackets="true" />
                                 <mo>&sdot;</mo>
                                 <math-number value="step.Expansion.Minors[j].Minor.Determinant"

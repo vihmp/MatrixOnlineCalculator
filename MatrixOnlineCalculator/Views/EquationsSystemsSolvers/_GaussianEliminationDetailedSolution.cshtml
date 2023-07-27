@@ -1,12 +1,13 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.AspNetCore.Html
 @using Microsoft.Extensions.Options
-@using MatrixOnlineCalculator.Models
-@using MatrixOnlineCalculator.Models.EquationsSystemsSolvers
+@using MatrixCalculators.EquationsSystemsSolvers
+@using MatrixCalculators.Utils
 @using MatrixOnlineCalculator.Models.Options
 @using MatrixOnlineCalculator.HtmlHelpers
+@using MathNet.Numerics.LinearAlgebra;
 
-@model EquationsSystemsSolverByGaussianElimination
+@model EssGaussianEliminationSolution
 
 @inject IOptions<MathFormatOptions> MathFormatOptions
 @inject IViewLocalizer Localizer
@@ -20,14 +21,14 @@
             <math>
                 <mrow>
                     <mo>(</mo>
-                    <math-matrix data="Model.GaussianElimination.Initial"
+                    <math-matrix data="Model.SolutionSteps.Initial"
                                  precision="MathFormatOptions.Value.DecimalPrecision" />
                     <mo>)</mo>
                 </mrow>
             </math>
         </p>
     </li>
-    @await Html.PartialAsync("_GaussianElimination", Model.GaussianElimination)
+    @await Html.PartialAsync("_GaussianElimination", Model.SolutionSteps)
     <li>
         <p>
             @Localizer["По полученной матрице найдем ранги матрицы <math><mi>A</mi></math> и " +
@@ -44,7 +45,7 @@
             <math>
                 <mi>rangA|B</mi>
                 <mo>=</mo>
-                <mn>@Model.GaussianElimination.Result.Rank()</mn>
+                <mn>@Model.SolutionSteps.Result.Rank()</mn>
             </math>
         </p>
     </li>
@@ -67,7 +68,10 @@
             </li>
             <li>
                 <p>@Localizer["Вычислим значения переменных:"]</p>
-                @BasicVariablesCalculation(Model, MathFormatOptions.Value.DecimalPrecision)
+                @foreach (var i in Model.BasicVariables)
+                {
+                    @VariableValue(i, Model.X.Row(i), MathFormatOptions.Value.DecimalPrecision)
+                }
             </li>
             break;
         case SolutionsNumber.InfinitelyManySolutions:
@@ -79,7 +83,7 @@
             </li>
             <li>
                 <p>@Localizer["Выпишем свободные переменные:"]</p>
-                @foreach (var i in Model.FreeVariablesIndices)
+                @foreach (var i in Model.FreeVariables)
                 {
                     <p>
                         <math>
@@ -93,7 +97,10 @@
             </li>
             <li>
                 <p>@Localizer["Выразим базисные переменные через свободные:"]</p>
-                @BasicVariablesCalculation(Model, MathFormatOptions.Value.DecimalPrecision)
+                @foreach (var i in Model.BasicVariables)
+                {
+                    @VariableValue(i, Model.X.Row(i), MathFormatOptions.Value.DecimalPrecision)
+                }
             </li>
             break;
     }
@@ -106,77 +113,19 @@
 
 @functions
 {
-    public IHtmlContent BasicVariablesCalculation(
-        EquationsSystemsSolverByGaussianElimination solver,
+    public IHtmlContent VariableValue(
+        int variableIndex,
+        Vector<double> coefficients,
         int precision)
     {
         var result = new HtmlContentBuilder();
 
-        foreach (var calculation in solver.BasicVariablesCalculation)
-        {
-            var paragraphTag = new TagBuilder("p");
-            var mathTag = new TagBuilder("math");
+        var paragraphTag = new TagBuilder("p");
+        var mathTag = new TagBuilder("math");
 
-            mathTag.InnerHtml.AppendHtml(
-                $"<msub><mi>x</mi><mn>{calculation.CalculatedVariableIndex}</mn></msub>");
-            mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
-
-            var nonZeroCoeffsCount = calculation.PolynomCoefficients
-                .Where(x => !MathUtils.AreEqual(x, 0, precision))
-                .Count();
-
-            if (!MathUtils.AreEqual(calculation.Divider, 1, precision) ||
-                (nonZeroCoeffsCount > 1))
-            {
-                if (!MathUtils.AreEqual(calculation.Divider, 1, precision))
-                {
-                    var mfracTag = new TagBuilder("mfrac");
-
-                    mfracTag.InnerHtml.AppendHtml("<mn>1</mn>");
-                    mfracTag.InnerHtml.AppendHtml(
-                        MathHtmlHelper.Number(
-                            calculation.Divider,
-                            false,
-                            precision));
-
-                    mathTag.InnerHtml.AppendHtml(mfracTag);
-                    mathTag.InnerHtml.AppendHtml("<mo>&sdot;</mo>");
-                }
-
-                bool useBrackets =
-                    !MathUtils.AreEqual(calculation.Divider, 1, precision) &&
-                    (nonZeroCoeffsCount > 1);
-
-                if (useBrackets)
-                {
-                    mathTag.InnerHtml.AppendHtml(
-                        "<mo stretchy=false>(</mo>");
-                }
-
-                mathTag.InnerHtml.AppendHtml(
-                MathHtmlHelper.Polynomial(
-                    calculation.PolynomCoefficients,
-                    "x",
-                    precision));
-
-                if (useBrackets)
-                {
-                    mathTag.InnerHtml.AppendHtml(
-                        "<mo stretchy=false>)</mo>");
-                }
-
-                mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
-            }
-
-            mathTag.InnerHtml.AppendHtml(
-                MathHtmlHelper.Polynomial(
-                    solver.X.Row(calculation.CalculatedVariableIndex),
-                    "c",
-                    precision));
-
-            paragraphTag.InnerHtml.SetHtmlContent(mathTag);
-            result.AppendHtml(paragraphTag);
-        }
+        mathTag.InnerHtml.AppendHtml($"<msub><mi>x</mi><mn>{variableIndex + 1}</mn></msub>");
+        mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
+        mathTag.InnerHtml.AppendHtml(MathHtmlHelper.Polynomial(coefficients, "c", precision));
 
         return result;
     }

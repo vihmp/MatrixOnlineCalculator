@@ -1,5 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
-using MatrixOnlineCalculator.Models;
+using MatrixCalculators.Utils;
 using NUnit.Framework;
 using System;
 

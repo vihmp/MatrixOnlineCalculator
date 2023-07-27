@@ -1,5 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
-using MatrixOnlineCalculator.Models.EquationsSystemsSolvers;
+using MatrixCalculators.EquationsSystemsSolvers;
 using MatrixOnlineCalculator.Models.Options;
 using MatrixOnlineCalculator.ViewModels.EquationsSystemsSolvers;
 using Microsoft.AspNetCore.Mvc;
@@ -47,9 +47,9 @@ namespace MatrixOnlineCalculator.Controllers
                 equationsNumber, 
                 1,
                 b);
-            
-            var solution = new EquationsSystemsSolverByGaussianElimination(
-                aMatrix, 
+
+            var solution = SolveEquationsSystem.UsingGaussianElimination(
+                aMatrix,
                 bMatrix,
                 options.Value.DecimalPrecision);
 
@@ -91,7 +91,7 @@ namespace MatrixOnlineCalculator.Controllers
                 1, 
                 b);
             
-            var solution = new EquationsSystemsSolverByCramerRule(
+            var solution = SolveEquationsSystem.UsingCramerRule(
                 aMatrix, 
                 bMatrix,
                 options.Value.DecimalPrecision);

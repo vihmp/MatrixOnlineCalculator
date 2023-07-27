@@ -1,14 +1,13 @@
 ﻿@using Microsoft.Extensions.Options
-@using MatrixOnlineCalculator.Models
-@using MatrixOnlineCalculator.Models.GaussianEliminationCalculation
-@using MatrixOnlineCalculator.Models.GaussianEliminationCalculation.ElementaryRowOperations
+@using MatrixCalculators.Utils
+@using MatrixCalculators.Utils.RowOperations 
 @using MatrixOnlineCalculator.Models.Options
 
 @model GaussianElimination
 
 @inject IOptions<MathFormatOptions> MathFormatOptions
 
-@foreach (var operation in Model.ElementaryRowOperations)
+@foreach (var operation in Model.RowOperations)
 {
     if (!operation.Initial.Equals(operation.Result))
     {
@@ -91,14 +90,14 @@
                 <math>
                     <mrow>
                         <mo>(</mo>
-                        <math-matrix data="operation.Initial" 
+                        <math-matrix data="operation.Initial"
                                      precision="MathFormatOptions.Value.DecimalPrecision" />
                         <mo>)</mo>
                     </mrow>
                     <mo>&rarr;</mo>
                     <mrow>
                         <mo>(</mo>
-                        <math-matrix data="operation.Result" 
+                        <math-matrix data="operation.Result"
                                      precision="MathFormatOptions.Value.DecimalPrecision" />
                         <mo>)</mo>
                     </mrow>

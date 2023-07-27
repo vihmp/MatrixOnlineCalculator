@@ -1,18 +1,18 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
-@using MatrixOnlineCalculator.Models.EquationsSystemsSolvers
+@using MatrixCalculators.EquationsSystemsSolvers
+@using MatrixCalculators.Utils
 @using MatrixOnlineCalculator.Models.Options
-@using MatrixOnlineCalculator.Models
 
-@model EquationsSystemsSolverByCramerRule
+@model EssCramerRuleSolution
 
 @inject IOptions<MathFormatOptions> MathFormatOptions
 @inject IViewLocalizer Localizer
 
 <ol>
-    @for (int i = 0; i < Model.Determinants.Count; i++)
+    @for (int i = 0; i < Model.SolutionSteps.Count; i++)
     {
-        var determinant = Model.Determinants[i];
+        var determinant = Model.SolutionSteps[i];
 
         <li>
             <p>
@@ -38,7 +38,7 @@
         @switch (Model.SolutionsNumber)
         {
             case SolutionsNumber.NoSolution:
-                int nonZeroDeltaIndex = Model.Determinants
+                int nonZeroDeltaIndex = Model.SolutionSteps
                     .FindIndex(x => !MathUtils.AreEqual(x.Determinant, 0, MathFormatOptions.Value.DecimalPrecision));
 
                 <p>
@@ -77,7 +77,7 @@
                 <p>
                     @Localizer["Система уравнений имеет единственное решение."]
                 </p>
-                @for (int i = 1; i < Model.Determinants.Count; i++)
+                @for (int i = 1; i < Model.SolutionSteps.Count; i++)
                 {
                     <p>
                         <math>
@@ -95,9 +95,9 @@
                             </mfrac>
                             <mo>=</mo>
                             <mfrac>
-                                <math-number value="Model.Determinants[i].Determinant"
+                                <math-number value="Model.SolutionSteps[i].Determinant"
                                              precision="MathFormatOptions.Value.DecimalPrecision" />
-                                <math-number value="Model.Determinants[0].Determinant"
+                                <math-number value="Model.SolutionSteps[0].Determinant"
                                              precision="MathFormatOptions.Value.DecimalPrecision" />
                             </mfrac>
                             <mo>=</mo>
@@ -110,7 +110,7 @@
             case SolutionsNumber.InfinitelyManySolutions:
                 <p>
                     <math>
-                        @for (int i = 0; i < Model.Determinants.Count; i++)
+                        @for (int i = 0; i < Model.SolutionSteps.Count; i++)
                         {
                             <msub>
                                 <mi>&Delta;</mi>

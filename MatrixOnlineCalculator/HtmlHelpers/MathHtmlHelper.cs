@@ -1,4 +1,4 @@
-﻿using MatrixOnlineCalculator.Models;
+﻿using MatrixCalculators.Utils;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;

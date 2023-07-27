@@ -1,18 +1,18 @@
 ﻿@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Options
-@using MatrixOnlineCalculator.Models.DeterminantCalculation
+@using MatrixCalculators.DeterminantCalculators
+@using MatrixCalculators.Utils.RowOperations
 @using MatrixOnlineCalculator.Models.Options
-@using MatrixOnlineCalculator.Models.GaussianEliminationCalculation.ElementaryRowOperations
 
-@model DeterminantByGaussianElimination
+@model DcGaussianEliminationSolution
 
 @inject IOptions<MathFormatOptions> MathFormatOptions
 @inject IViewLocalizer Localizer
 
 <ol>
-    @await Html.PartialAsync("_GaussianElimination", Model.GaussianElimination)
+    @await Html.PartialAsync("_GaussianElimination", Model.SolutionSteps)
     @{
-        int rowSwitchingNumber = Model.GaussianElimination.ElementaryRowOperations
+        int rowSwitchingNumber = Model.SolutionSteps.RowOperations
             .OfType<RowSwitching>()
             .Count();
 
@@ -36,7 +36,7 @@
                 <math>
                     <mrow>
                         <mo>|</mo>
-                        <math-matrix data="Model.GaussianElimination.Initial" />
+                        <math-matrix data="Model.SolutionSteps.Initial" />
                         <mo>|</mo>
                     </mrow>
                     <mo>=</mo>
@@ -46,7 +46,7 @@
                             <mo>-</mo>
                         }
                         <mo>|</mo>
-                        <math-matrix data="Model.GaussianElimination.Result"
+                        <math-matrix data="Model.SolutionSteps.Result"
                                      precision="MathFormatOptions.Value.DecimalPrecision" />
                         <mo>|</mo>
                     </mrow>
@@ -57,18 +57,18 @@
                                      use-brackets="true" />
                         <mo>&sdot;</mo>
                     }
-                    @for (int i = 0; i < Model.GaussianElimination.Initial.RowCount; i++)
+                    @for (int i = 0; i < Model.SolutionSteps.Initial.RowCount; i++)
                     {
                         if (i > 0)
                         {
                             <mo>&sdot;</mo>
                         }
-                        <math-number value="Model.GaussianElimination.Result[i, i]"
+                        <math-number value="Model.SolutionSteps.Result[i, i]"
                                      precision="MathFormatOptions.Value.DecimalPrecision"
                                      use-brackets="true" />
                     }
                     <mo>=</mo>
-                    <math-number value="Model.Determinant" 
+                    <math-number value="Model.Determinant"
                                  precision="MathFormatOptions.Value.DecimalPrecision" />
                 </math>
             </p>

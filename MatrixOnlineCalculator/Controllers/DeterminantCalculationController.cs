@@ -1,5 +1,5 @@
 ﻿using MathNet.Numerics.LinearAlgebra;
-using MatrixOnlineCalculator.Models.DeterminantCalculation;
+using MatrixCalculators.DeterminantCalculators;
 using MatrixOnlineCalculator.Models.Options;
 using MatrixOnlineCalculator.ViewModels.DeterminantCalculation;
 using Microsoft.AspNetCore.Mvc;
@@ -37,8 +37,8 @@ namespace MatrixOnlineCalculator.Controllers
                 matrixSize, 
                 matrixData);
 
-            var solution = new LaplaceExpansion(
-                matrix,
+            var solution = CalculateDeterminant.UsingLaplaceExpansion(
+                matrix, 
                 options.Value.DecimalPrecision);
 
             var viewModel = new DeterminantCalculationResultViewModel()
@@ -72,7 +72,7 @@ namespace MatrixOnlineCalculator.Controllers
                 matrixSize, 
                 matrixData);
 
-            var solution = new DeterminantByGaussianElimination(
+            var solution = CalculateDeterminant.UsingGaussianElimination(
                 matrix,
                 options.Value.DecimalPrecision);
 
