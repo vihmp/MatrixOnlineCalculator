@@ -11,7 +11,7 @@ namespace UnitTests.MatrixCalculators.EquationsSystemsSolvers
     public class EssCramerRuleTest
     {
         [Test]
-        public void EquationsSystemsSolverByCramerRuleOneSolution()
+        public void SolveOneSolution()
         {
             int precision = 5;
 
@@ -47,7 +47,7 @@ namespace UnitTests.MatrixCalculators.EquationsSystemsSolvers
         }
 
         [Test]
-        public void EquationsSystemsSolverByCramerRuleNoSolutions()
+        public void SolveNoSolution()
         {
             int precision = 5;
 
@@ -78,7 +78,7 @@ namespace UnitTests.MatrixCalculators.EquationsSystemsSolvers
         }
 
         [Test]
-        public void EquationsSystemsSolverByCramerRuleManySolutions()
+        public void SolveManySolutions()
         {
             int precision = 5;
 

@@ -17,7 +17,7 @@ namespace UnitTests.MatrixOnlineCalculator.HtmlHelpers
         [TestCase(-1.23456789, true, null, ExpectedResult = "<mrow><mo stretchy=\"false\">(</mo>" +
             "<mn>-1,23456789</mn><mo stretchy=\"false\">)</mo></mrow>")]
         [TestCase(-0.000001, true, 2, ExpectedResult = "<mn>0</mn>")]
-        public string MathHtmlHelperNumber(double value, bool useBrackets, int? precision)
+        public string Number(double value, bool useBrackets, int? precision)
         {
             return MathHtmlHelper.Number(value, useBrackets, precision)
                 .AsString();
@@ -45,7 +45,7 @@ namespace UnitTests.MatrixOnlineCalculator.HtmlHelpers
         [TestCase(new double[] { 1, 2, 3 }, "a", 3, ExpectedResult = "<mn>1</mn>" +
             "<mo>+</mo><mn>2</mn><msub><mi>a</mi><mn>1</mn></msub>" +
             "<mo>+</mo><mn>3</mn><msub><mi>a</mi><mn>2</mn></msub>")]
-        public string MathHtmlHelperPolynomial(
+        public string Polynomial(
             IEnumerable<double> coefficients, 
             string variableName, 
             int precision)

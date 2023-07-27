@@ -9,7 +9,7 @@ namespace UnitTests.MatrixCalculators.EquationsSystemsSolvers
     public class EssGaussianEliminationTest
     {
         [Test]
-        public void EquationsSystemsSolverByGaussianEliminationOneSolution()
+        public void SolveOneSolution()
         {
             int precision = 5;
 
@@ -45,7 +45,7 @@ namespace UnitTests.MatrixCalculators.EquationsSystemsSolvers
         }
 
         [Test]
-        public void EquationsSystemsSolverByGaussianEliminationOneSolutionMoreRows()
+        public void SolveOneSolutionMoreRows()
         {
             int precision = 5;
 
@@ -80,7 +80,7 @@ namespace UnitTests.MatrixCalculators.EquationsSystemsSolvers
         }
 
         [Test]
-        public void EquationsSystemsSolverByGaussianEliminationNoSolution()
+        public void SolveNoSolution()
         {
             int precision = 5;
 
@@ -108,7 +108,7 @@ namespace UnitTests.MatrixCalculators.EquationsSystemsSolvers
         }
 
         [Test]
-        public void EquationsSystemsSolverByGaussianEliminationManySolutions()
+        public void SolveManySolutions()
         {
             int precision = 5;
 
@@ -145,7 +145,7 @@ namespace UnitTests.MatrixCalculators.EquationsSystemsSolvers
         }
 
         [Test]
-        public void EquationsSystemsSolverByGaussianEliminationManySolutionsMoreColumns()
+        public void SolveManySolutionsMoreColumns()
         {
             int precision = 5;
 
@@ -180,7 +180,7 @@ namespace UnitTests.MatrixCalculators.EquationsSystemsSolvers
         }
 
         [Test]
-        public void EquationsSystemsSolverByGaussianEliminationManySolutionsMoreRows()
+        public void SolveManySolutionsMoreRows()
         {
             int precision = 5;
 

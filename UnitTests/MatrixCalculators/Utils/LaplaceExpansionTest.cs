@@ -11,7 +11,7 @@ namespace UnitTests.MatrixCalculators.Utils
     public class LaplaceExpansionTest
     {
         [Test]
-        public void LaplaceExpansion()
+        public void Ctor()
         {
             int precision = 5;
             double delta = Math.Pow(0.1, precision);
@@ -59,7 +59,7 @@ namespace UnitTests.MatrixCalculators.Utils
         }
 
         [Test]
-        public void LaplaceExpansionOneElementMatrix()
+        public void CtorOneElementMatrix()
         {
             int precision = 5;
             double delta = Math.Pow(0.1, precision);

@@ -9,7 +9,7 @@ namespace UnitTests.MatrixCalculators.Utils
     public class GaussianEliminationTest
     {
         [Test]
-        public void GaussianEliminationSquareMatrix()
+        public void CtorSquareMatrix()
         {
             int precision = 5;
 
@@ -33,7 +33,7 @@ namespace UnitTests.MatrixCalculators.Utils
         }
 
         [Test]
-        public void GaussianEliminationSingularMatrix()
+        public void CtorSingularMatrix()
         {
             int precision = 5;
 
@@ -59,7 +59,7 @@ namespace UnitTests.MatrixCalculators.Utils
         }
 
         [Test]
-        public void GaussianEliminationColumnCountGreater()
+        public void CtorMoreColumns()
         {
             int precision = 5;
 
@@ -83,7 +83,7 @@ namespace UnitTests.MatrixCalculators.Utils
         }
 
         [Test]
-        public void GaussianEliminationRowCountGreater()
+        public void CtorMoreRows()
         {
             int precision = 5;
 
@@ -109,7 +109,7 @@ namespace UnitTests.MatrixCalculators.Utils
         }
 
         [Test]
-        public void GaussianEliminationNoOperations()
+        public void CtorNoOperations()
         {
             int precision = 5;
 

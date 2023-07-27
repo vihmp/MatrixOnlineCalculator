@@ -9,7 +9,7 @@ namespace UnitTests.MatrixCalculators.DeterminantCalculators
     public class DcGaussianEliminationTest
     {
         [Test]
-        public void DeterminantByGaussianEliminationNoRowSwitching()
+        public void GetDeterminantNoRowSwitchings()
         {
             int precision = 5;
             double delta = Math.Pow(0.1, precision);
@@ -29,7 +29,7 @@ namespace UnitTests.MatrixCalculators.DeterminantCalculators
         }
 
         [Test]
-        public void DeterminantByGaussianEliminationRowSwitchingOddNumber()
+        public void GetDeterminantOddNumberOfRowSwitchings()
         {
             int precision = 5;
             double delta = Math.Pow(0.1, precision);
@@ -49,7 +49,7 @@ namespace UnitTests.MatrixCalculators.DeterminantCalculators
         }
 
         [Test]
-        public void DeterminantByGaussianEliminationRowSwitchingEvenNumber()
+        public void GetDeterminantEvenNumberOfRowSwitchings()
         {
             int precision = 5;
             double delta = Math.Pow(0.1, precision);
