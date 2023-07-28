@@ -5,7 +5,6 @@
 @using MatrixCalculators.Utils
 @using MatrixOnlineCalculator.Models.Options
 @using MatrixOnlineCalculator.HtmlHelpers
-@using MathNet.Numerics.LinearAlgebra;
 
 @model EssGaussianEliminationSolution
 
@@ -68,10 +67,7 @@
             </li>
             <li>
                 <p>@Localizer["Вычислим значения переменных:"]</p>
-                @foreach (var i in Model.BasicVariables)
-                {
-                    @VariableValue(i, Model.X.Row(i), MathFormatOptions.Value.DecimalPrecision)
-                }
+                @BasicVariablesValues(Model, MathFormatOptions.Value.DecimalPrecision)
             </li>
             break;
         case SolutionsNumber.InfinitelyManySolutions:
@@ -97,10 +93,7 @@
             </li>
             <li>
                 <p>@Localizer["Выразим базисные переменные через свободные:"]</p>
-                @foreach (var i in Model.BasicVariables)
-                {
-                    @VariableValue(i, Model.X.Row(i), MathFormatOptions.Value.DecimalPrecision)
-                }
+                @BasicVariablesValues(Model, MathFormatOptions.Value.DecimalPrecision)
             </li>
             break;
     }
@@ -113,19 +106,54 @@
 
 @functions
 {
-    public IHtmlContent VariableValue(
-        int variableIndex,
-        Vector<double> coefficients,
+    public IHtmlContent BasicVariablesValues(
+        EssGaussianEliminationSolution solution,
         int precision)
     {
         var result = new HtmlContentBuilder();
 
-        var paragraphTag = new TagBuilder("p");
-        var mathTag = new TagBuilder("math");
+        for (int i = solution.BasicVariables.Count - 1; i >= 0; i--)
+        {
+            var paragraphTag = new TagBuilder("p");
+            var mathTag = new TagBuilder("math");
 
-        mathTag.InnerHtml.AppendHtml($"<msub><mi>x</mi><mn>{variableIndex + 1}</mn></msub>");
-        mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
-        mathTag.InnerHtml.AppendHtml(MathHtmlHelper.Polynomial(coefficients, "c", precision));
+            int variable = solution.BasicVariables[i];
+
+            mathTag.InnerHtml.AppendHtml($"<msub><mi>x</mi><mn>{variable + 1}</mn></msub>");
+            mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
+
+            var row = solution.SolutionSteps.Result.Row(i);
+            var polynomial = new double[row.Count];
+            polynomial[0] = row[row.Count - 1];
+
+            for (int j = variable + 1; j < row.Count - 1; j++)
+            {
+                polynomial[j + 1] = -row[j];
+            }
+
+            if (polynomial.Count(x => !MathUtils.AreEqual(x, 0, precision)) > 1)
+            {
+                mathTag.InnerHtml.AppendHtml("<mo>(</mo>");
+                mathTag.InnerHtml.AppendHtml(
+                    MathHtmlHelper.Polynomial(polynomial, "x", precision));
+                mathTag.InnerHtml.AppendHtml("<mo>)</mo>");
+            }
+            else
+            {
+                mathTag.InnerHtml.AppendHtml(
+                    MathHtmlHelper.Polynomial(polynomial, "x", precision));
+            }
+
+            mathTag.InnerHtml.AppendHtml("<mo>/</mo>");
+            mathTag.InnerHtml.AppendHtml(
+                MathHtmlHelper.Number(solution.SolutionSteps.Result[i, variable], true, precision));
+            mathTag.InnerHtml.AppendHtml("<mo>=</mo>");
+            mathTag.InnerHtml.AppendHtml(
+                MathHtmlHelper.Polynomial(solution.X.Row(variable), "c", precision));
+
+            paragraphTag.InnerHtml.SetHtmlContent(mathTag);
+            result.AppendHtml(paragraphTag);
+        }
 
         return result;
     }
